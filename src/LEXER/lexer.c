@@ -1,21 +1,34 @@
 #include "../../includes/minishell.h"
 
-static size_t	get_quote_len(char *command)
+static size_t get_quote_len(const char *command)
 {
-	size_t	len;
-	char	c;
+    size_t len = 0;
+    char c;
 
-	len = 1;
-	c = *command;
-	while(command)
-	{
-		len++;
-		if(*command == c)
-			break;
-		command++;
-	}
-	return (len);
+    while (*command)
+    {
+        if (*command == '\'' || *command == '"')
+            break;
+        command++;
+    }
+    if (*command == '\0')
+        return len;
+
+    c = *command;
+    command++;
+    len++;
+    while (*command)
+    {
+        len++;
+        if (*command == c)
+            break;
+        command++;
+    }
+    if (*command == '\0')
+        return 0;
+    return len;
 }
+
 
 static size_t	get_command_len(char *command)
 {
