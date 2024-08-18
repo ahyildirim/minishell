@@ -21,7 +21,9 @@ char		*ft_strlcpy(char *dst, char *src, int len);
 char		*is_meta_char(char *command);
 char		*ft_itoa(int n);
 char		*get_arg();
+char		*ft_strdup(const char *src);
 
+void		*ft_memcpy(void *dest, const void *src, size_t n);
 void		create_lexlist(char *command, t_lexlist **lex_table);
 void		print_error(char *str1, char *str2, char *str3);
 void		dollar_expander(char **dst, char **src);
