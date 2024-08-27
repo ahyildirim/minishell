@@ -32,10 +32,13 @@ void		env_expander(char **dst, char *env);
 void		set_lex_types(t_lexlist *lex_table);
 void		ft_strjoin(char **dst, char *src);
 void		clear_empty_lextables(void);
+void		cmd_expander(char **cmd);
+void		fill_cmdtable(void);
 void		check_syntax(void);
 void		expander(void);
 void		lexer(void);
 
+int			create_filelist(t_cmdlist *cmd_table, t_lexlist **lex_table);
 int			print_lex_error(t_lexlist *lex_table);
 int			ft_strcmp(char *str1, char *str2);
 

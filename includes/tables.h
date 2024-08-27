@@ -9,12 +9,32 @@ typedef struct s_env
 	
 }				t_env;
 
+typedef struct s_filelist
+{
+	char				*file_name;
+	char				*meta_char;
+	int					fd;
+	struct s_filelist	*next;
+}				t_filelist;
+
 typedef struct s_lexlist
 {
-	char			type;
-	char 			*content;
-	struct s_lexlist *next;
+	char				type;
+	char 				*content;
+	struct s_lexlist	*next;
 }				t_lexlist;
+
+typedef struct	s_cmdlist
+{
+	int					input_file;
+	int					output_file;
+	int					pid;
+	char				*heradoc_values;
+	char				*command;
+	char				**path;
+	t_filelist			*files;
+	struct s_cmdlist	*next;
+}				t_cmdlist;
 
 typedef struct s_data
 {
@@ -26,6 +46,7 @@ typedef struct s_data
 	int			main_pid;
 	t_lexlist	*lex_table;
 	t_env		*env_table;
+	t_cmdlist	*cmd_table;
 }				t_data;
 
 #endif
