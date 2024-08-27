@@ -46,4 +46,5 @@ void	parser(void)
 	g_data.cmd_table = NULL;
 	create_cmdlist(g_data.lex_table);
 	fill_cmdtable();
+	create_files(g_data.cmd_table); //TODO
 }
