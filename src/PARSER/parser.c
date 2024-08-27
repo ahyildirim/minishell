@@ -27,11 +27,11 @@ static void create_cmd_nodes(int pipe_count)
 
 static void	create_cmdlist(t_lexlist *lex_table)
 {
-	int	pipe_count; //Kaç adet komut düğümü oluşturulacaği
+	int	pipe_count; //Kaç adet komut düğümü oluşturulacağımız.
 
 	if(!lex_table)
 		return ;
-	pipe_count = 1;
+	pipe_count = 1; //Her türlü 1 tane komut girileceği için 1'den başlatıyoruz.
 	while(lex_table)
 	{
 		if(lex_table->type == SIGN_PIPE) //Her PIPE geldiğinde yeni komuta geçmemiz gerektiği için bu sayı kaç adet komut düğümü oluşturuacağımız için gerekli.
