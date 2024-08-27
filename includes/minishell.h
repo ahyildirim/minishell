@@ -13,6 +13,8 @@
 
 t_data 		g_data;
 
+extern		g_sig;
+
 size_t		trim_left_spaces(char **command);
 
 t_lexlist	*add_lex_node(t_lexlist **node);
@@ -37,6 +39,7 @@ void		fill_cmdtable(void);
 void		check_syntax(void);
 void		expander(void);
 void		lexer(void);
+void		handle_signal(void);
 
 int			create_filelist(t_cmdlist *cmd_table, t_lexlist **lex_table);
 int			print_lex_error(t_lexlist *lex_table);
