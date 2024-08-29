@@ -29,36 +29,37 @@ static void	read_arg_value(int *fd)
 		write(fd[1], str, ft_strlen(str)); //girilen argümanı write ile fd[1]'e yazdır.
 		close(fd[1]);
 		free(str);
-		free_loop(); //TODO
-		free_table(); //TODO
+		//free_loop(); //TODO
+		//free_table(); //TODO
 		exit(EXIT_SUCCESS);
 	}
 }
 
-static int	read_arg(int *fd)
+static int	read_arg(int *fd, t_data *data)
 {
 	int	pid;
 	int	ret;
 
 	pid = fork(); //fork ile bir child process oluştur.
-	g_data.is_reading = 1; //Sanırım ileride gerekli olacak bir kontrol?
+	data->is_reading = 1; //Sanırım ileride gerekli olacak bir kontrol?
 	if(pid == 0) //Child process içinde girilen argümanı yazmak için bir fonksiyon kullan.
 		read_arg_value(fd);
 	close(fd[1]);
-	waitpid(pid , &ret, 0); //child processin bitmesini bekle, ret değerine hangi değerle çıktığını al.
-	g_data.is_reading = 0;
+	waitpid(pid , &ret, 0);  //child processin bitmesini bekle, ret değerine hangi değerle çıktığını al.
+	data->is_reading = 0;
 	ret = WEXITSTATUS(ret); //WEXITSTATUS ile ret'in hangi exit durumuna denk geldiğini kontrol et.
+	printf("%d\n", ret);
 	if(ret == SIGNAL_C) //Eğer CTRL+C geldiyse fonksiyondan çık.
 	{
 		close(fd[0]);
-		update_history(g_data.input); //TODO
-		free_loop(); //TODO
+		//update_history(data->input); //TODO
+		//free_loop(); //TODO
 		return (0);
 	}
 	return (1);
 }
 
-char	*get_arg()
+char	*get_arg(t_data *data)
 {
 	char	*str;
 	int		fd[2];
@@ -66,7 +67,7 @@ char	*get_arg()
 
 	if(pipe(fd) == -1) //pipe fonksiyonu ile iki process içinde iletişim kurmak için yazma ve okuma uçlu boru hattı aç, (fd[0]-> okuma, fd[1]-> yazma). Bilmiyorsan Code Vaulttan Pipe in c videosunu izle.
 		return (NULL);
-	if(!read_arg(fd)) //argümanı okumak için bir fonksiyon.
+	if(!read_arg(fd, data)) //argümanı okumak için bir fonksiyon.
 		return (NULL);
 	str = NULL;
 	while(read(fd[0], buf, 1)) //argümanı oku, buffera at ve buffera her attığın karakteri str'ın sonuna ekle

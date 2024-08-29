@@ -11,12 +11,12 @@ static void	init_cmdnode(t_cmdlist *cmd_table)
 	cmd_table->heradoc_values = NULL;
 }
 
-static void create_cmd_nodes(int pipe_count)
+static void create_cmd_nodes(int pipe_count, t_data *data)
 {
 	t_cmdlist	*tmp_cmdtable;
 
-	g_data.cmd_table = (t_cmdlist *)malloc(sizeof(t_cmdlist)); //yer aç
-	init_cmdnode(g_data.cmd_table); //ilk komut için node oluştur.
+	data->cmd_table = (t_cmdlist *)malloc(sizeof(t_cmdlist)); //yer aç
+	init_cmdnode(data->cmd_table); //ilk komut için node oluştur.
 	while(--pipe_count) //kalanlar için node oluştur.
 	{
 		tmp_cmdtable->next = (t_cmdlist *)malloc(sizeof(t_cmdlist));
@@ -25,7 +25,7 @@ static void create_cmd_nodes(int pipe_count)
 	}
 }
 
-static void	create_cmdlist(t_lexlist *lex_table)
+static void	create_cmdlist(t_lexlist *lex_table, t_data *data)
 {
 	int	pipe_count; //Kaç adet komut düğümü oluşturulacağımız.
 
@@ -38,13 +38,13 @@ static void	create_cmdlist(t_lexlist *lex_table)
 			pipe_count++;
 		lex_table = lex_table->next;
 	}
-	create_cmd_nodes(pipe_count); //Node'ları oluşturuyoruz.
+	create_cmd_nodes(pipe_count, data); //Node'ları oluşturuyoruz.
 }
 
-void	parser(void)
+void	parser(t_data *data)
 {
-	g_data.cmd_table = NULL;
-	create_cmdlist(g_data.lex_table);
-	fill_cmdtable();
-	create_files(g_data.cmd_table); //TODO
+	data->cmd_table = NULL;
+	create_cmdlist(data->lex_table, data);
+	fill_cmdtable(data);
+	//create_files(data->cmd_table); //TODO
 }

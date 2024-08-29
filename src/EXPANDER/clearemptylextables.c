@@ -1,19 +1,19 @@
 #include "../../includes/minishell.h"
 
-void	clear_empty_lextables(void)
+void	clear_empty_lextables(t_data *data)
 {
 	t_lexlist	*lex_table;
 	t_lexlist	*tmp_lex_table;
 
-	lex_table = g_data.lex_table; //Listenin ilk node'u
-	tmp_lex_table = g_data.lex_table; //Listenin ilk node'u
+	lex_table = data->lex_table; //Listenin ilk node'u
+	tmp_lex_table = data->lex_table; //Listenin ilk node'u
 	while(lex_table)
 	{
 		if(lex_table->content == NULL) //Eğer content boş ise
 		{
-			if(lex_table == g_data.lex_table) //Eğer ilk node ise
+			if(lex_table == data->lex_table) //Eğer ilk node ise
 			{
-				g_data.lex_table = g_data.lex_table->next; //İlk node'u güncelle.
+				data->lex_table = data->lex_table->next; //İlk node'u güncelle.
 				tmp_lex_table = tmp_lex_table->next; //Geçici node'u da güncelle.
 			}
 			else //İlk node değil ise
