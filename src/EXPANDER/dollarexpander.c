@@ -52,7 +52,7 @@ void	dollar_expander(char **dst, char **src, t_data *data)
 		handle_double_dollar(dst, src, data); //Eğer yine dolar var ise bu komut bizim shellimizin process id'sini yazar. (Shell'i açıp $$ yaz ve çıktıyı gör).
 	else if(*str == *QUSTION_MARK)
 		handle_question_mark(dst, src, data); //Eğer soru işareti var ise bu komut shell ile son çalıştırılan programın return değerini döndürür. (Shell'de return 10 verdiğin bir main yaz ve çalıştır sonra $? komutunu gir, 10 çıktısını alıcaksın.)
-	else if(*str == ' ' || *str == (char)NULL || *str == *DOUBLE_QUOTE || *str == *SINGLE_QUOTE)
+	else if(*str == ' ' || *str == '\0' || *str == *DOUBLE_QUOTE || *str == *SINGLE_QUOTE)
 		handle_single_dollar(dst); //Eğer sadece tek bir dolar var ise sadece genişleticeğimiz texte $ işaretini ekle.
 	else
 		handle_dollar_value(dst, src, data); //Eğer text var ise bu bir variable ismidir ve o isimi işlememiz gerekir.

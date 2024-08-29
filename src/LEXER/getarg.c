@@ -48,7 +48,6 @@ static int	read_arg(int *fd, t_data *data)
 	waitpid(pid , &ret, 0);  //child processin bitmesini bekle, ret değerine hangi değerle çıktığını al.
 	data->is_reading = 0;
 	ret = WEXITSTATUS(ret); //WEXITSTATUS ile ret'in hangi exit durumuna denk geldiğini kontrol et.
-	printf("%d\n", ret);
 	if(ret == SIGNAL_C) //Eğer CTRL+C geldiyse fonksiyondan çık.
 	{
 		close(fd[0]);
