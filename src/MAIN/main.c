@@ -6,7 +6,7 @@ void shell_loop(t_data *data)
 {
 	while (1)
 	{
-		data->input = readline("prompt #");
+		data->input = readline("minishell> ");
 		lexer(data);
 		if (data->input == NULL)
 			break;
