@@ -2,18 +2,29 @@
 
 int	g_sig = 0;
 
+void	minishell_func(t_data *data)
+{
+	add_history(data->input);
+	//parser(data);
+	lexer(data);
+	print_lexer(data);
+	//heredoc
+	//free
+	//execute
+	
+}
+
 void shell_loop(t_data *data)
 {
 	while (1)
 	{
 		data->input = readline("minishell> ");
-		lexer(data);
+		
 		if (data->input == NULL)
 			break;
 		if (data->input && *data->input)
 		{
-			add_history(data->input);
-			print_lexer(data);
+			minishell_func(data);
 		}
 	}
 	
