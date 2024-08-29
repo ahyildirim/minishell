@@ -1,5 +1,11 @@
 #include "../../includes/minishell.h"
 
+static void	handle_sigint(int sig)
+{
+	(void)sig;
+	exit(SIGNAL_C);
+}
+
 static int	is_valid_arg(char *str)
 {
 	char	*tmp;
@@ -20,6 +26,7 @@ static void	read_arg_value(int *fd)
 {
 	char	*str;
 
+	signal(SIGINT, handle_sigint);
 	close(fd[0]); //Sadece yazmayı kullanacağımız için fd[0]'a ihtiyaç yok
 	while(1)
 	{
