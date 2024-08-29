@@ -42,11 +42,11 @@ static void	expand_env_content(char **cmd, char *content)
 	}
 }
 
-void	cmd_expander(char **cmd)
+void	cmd_expander(char **cmd, t_data *data)
 {
 	t_env *tmp_env;
 
-	tmp_env = g_data.env_table; //Geçici bir env_table structı aç.
+	tmp_env = data->env_table; //Geçici bir env_table structı aç.
 	while(tmp_env && *cmd && **cmd)
 	{
 		if(ft_strcmp("PATH", tmp_env->env_name)) //Eğer gelen env PATH ise

@@ -1,23 +1,31 @@
 #include "../../includes/minishell.h"
 
-void	str_append_char(char **dst, char c)
+void str_append_char(char **dst, char c)
 {
-	int		len;
-	char	*updated_str;
-	char	*tmp_str;
-	char	*tmp_dst;
+    size_t len = (*dst) ? strlen(*dst) : 0; // Mevcut uzunluğu al
+    char *updated_str = malloc(len + 2); // 1 karakter ve 1 null terminatör için yer ayır
+    if (!updated_str)
+    {
+        perror("malloc failed");
+        exit(EXIT_FAILURE);
+    }
 
-	len = ft_strlen(*dst) + 1;
-	updated_str = malloc(len + 1);
-	if(!updated_str)
-		return ;
-	tmp_str = updated_str;
-	tmp_dst = *dst;
-	while(tmp_dst && *tmp_dst)
-		*(tmp_str++) = *(tmp_dst++);
-	*(tmp_str++) = c;
-	*(tmp_str++) = 0;
-	if(*dst)
-		free(*dst);
-	*dst = updated_str;
+    // Mevcut karakterleri yeni belleğe kopyala
+    if (*dst)
+    {
+        char *tmp_src = *dst;
+        char *tmp_dst = updated_str;
+        while (*tmp_src)
+        {
+            *tmp_dst++ = *tmp_src++;
+        }
+        free(*dst); // Eski belleği serbest bırak
+    }
+
+    // Yeni karakteri ve null terminatörü ekle
+    updated_str[len] = c;
+    updated_str[len + 1] = '\0';
+
+    *dst = updated_str; // Yeni belleği `*dst` işaretçisine ata
 }
+

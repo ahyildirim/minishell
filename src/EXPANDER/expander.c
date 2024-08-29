@@ -1,10 +1,10 @@
 #include "../../includes/minishell.h"
 
-void	env_expander(char **dst, char *env)
+void	env_expander(char **dst, char *env, t_data *data)
 {
 	t_env	*tmp_env;
 
-	tmp_env = g_data.env_table;
+	tmp_env = data->env_table;
 	while(tmp_env) //Tüm environment nodeları içinde dolaş
 	{
 		if(ft_strcmp(env, tmp_env->env_name)) //env adları eşleşiyor ise
@@ -16,15 +16,15 @@ void	env_expander(char **dst, char *env)
 	}
 }
 
-static void	set_order(char **dst, char **src)
+static void	set_order(char **dst, char **src, t_data *data)
 {
 	if(**src == *DOLLAR) //Eğer dolar ise bu bir custom belirlenmiş environment variabledır. Bu yüzden doların devamında ne olduğuna bakmamız gerekiyor.
-		dollar_expander(dst, src);
+		dollar_expander(dst, src, data);
 	if(**src == *TILDA)
-		env_expander(dst, "HOME"); //Eğer ~ ise direkt HOME environmentini atamamız gerekir. (~ Shell'de anadizini ifade eder.)
+		env_expander(dst, "HOME", data); //Eğer ~ ise direkt HOME environmentini atamamız gerekir. (~ Shell'de anadizini ifade eder.)
 }
 
-static void	text_expander(t_lexlist *lex_table, int meta)
+static void	text_expander(t_lexlist *lex_table, int meta, t_data *data)
 {
 	char	*command;
 	char	*expanded_text;
@@ -40,8 +40,8 @@ static void	text_expander(t_lexlist *lex_table, int meta)
 			//Yani tırnak içinde değilsek (flag 0 ise), tırnak içinde olduğumuzu doğrulayan flag 1 olur, sonraki iterasyonlarda tekrar tırnağa denk gelirsek flag 1 olduğu için 1'in 1 ile XOR kıyaslaması 0 olur ve tırnaktan çıktığımızı belirleriz.
 		else if(*command == '\"' && (flag == 0 || flag == 2)) //Yukarıdakinin aynı mantığı fakat çift tırnak versiyonu.
 			flag ^= 2;
-		else if((*command == DOLLAR || *command == TILDA) && (flag == 0 || flag == 2)) //Eğer $ veya ~ var ise bunların ne yapması gerektiğini belirliyoruz.
-			set_order(&expanded_text, &command); //Daha iyi anlamak için shell'de environment variables'ı detaylı bir şekilde araştır.
+		else if((*command == *DOLLAR || *command == *TILDA) && (flag == 0 || flag == 2)) //Eğer $ veya ~ var ise bunların ne yapması gerektiğini belirliyoruz.
+			set_order(&expanded_text, &command, data); //Daha iyi anlamak için shell'de environment variables'ı detaylı bir şekilde araştır.
 		else
 			str_append_char(&expanded_text, *command); //Eğer hiçbirisi değil ise sadece genişleticeğimiz text'e  harfi ekle.
 		command++;
@@ -52,26 +52,26 @@ static void	text_expander(t_lexlist *lex_table, int meta)
 	lex_table->content = expanded_text; //Content'i genişlettiğimiz, anlam kazandırdığımız text ile eşitle..
 }
 
-static void	lexlist_value_expander(void)
+static void	lexlist_value_expander(t_data *data)
 {
 	t_lexlist	*lex_table;
 
-	lex_table = g_data.lex_table;
+	lex_table = data->lex_table;
 	while(lex_table)
 	{
 		if(lex_table->type == TEXT) //Eğer gelen content metin ise;
-			text_expander(lex_table, 0); //Meta karakter flagi 0 olarak bu metine anlam kazandır.
+			text_expander(lex_table, 0, data); //Meta karakter flagi 0 olarak bu metine anlam kazandır.
 		else if(lex_table->type != SIGN_PIPE &&  lex_table->next) //Eğer | değilse ve bir sonraki node var ise
 			if(lex_table->type != SIGN_DOUBLE_LESS) //Eğer << değilse
-				text_expander(lex_table, 1); //Yine aynı fonksiyonu çalıştır fakat meta karakter olduğu için 1 flagi ile yolla.
+				text_expander(lex_table, 1, data); //Yine aynı fonksiyonu çalıştır fakat meta karakter olduğu için 1 flagi ile yolla.
 		lex_table = lex_table->next;
 	}
 }
 
-void	expander(void)
+void	expander(t_data *data)
 {
-	if(g_data.output == 2)
+	if(data->output == 2)
 		return ;
-	lexlist_value_expander(); //Lexer ile doldurduğumuz lexlist'in içindeki contentlere parser bölümü için anlam kazandırır.
-	clear_empty_lextables(); //Eğer hiçbişeye anlam kazandıramadıysak, yani node içinde content'i boş olan var ise bu node'ları silmemizi sağlayan fonksiyon.
+	lexlist_value_expander(data); //Lexer ile doldurduğumuz lexlist'in içindeki contentlere parser bölümü için anlam kazandırır.
+	clear_empty_lextables(data); //Eğer hiçbişeye anlam kazandıramadıysak, yani node içinde content'i boş olan var ise bu node'ları silmemizi sağlayan fonksiyon.
 }

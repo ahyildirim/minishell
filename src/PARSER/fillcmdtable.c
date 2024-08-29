@@ -26,7 +26,7 @@ static char **create_path(t_lexlist *lex_table)
 	return (path);
 }
 
-static void	fill_cmdnode(t_cmdlist *cmd_table, t_lexlist **lex_table)
+static void	fill_cmdnode(t_cmdlist *cmd_table, t_lexlist **lex_table, t_data *data)
 {
 	char	**tmp_path;
 	int		start;
@@ -36,12 +36,12 @@ static void	fill_cmdnode(t_cmdlist *cmd_table, t_lexlist **lex_table)
 	start = 0; //Komutun başlangıcı takip edilir.
 	while (*lex_table && (*lex_table)->type != SIGN_PIPE)
 	{
-		if(create_filelist(cmd_table, lex_table)) //Eğer gelen düğüm ile dosya oluşturulabiliyor ise oluşturur ve bir sonraki iterasyona geçer.
+		if(create_filelist(cmd_table, lex_table, data)) //Eğer gelen düğüm ile dosya oluşturulabiliyor ise oluşturur ve bir sonraki iterasyona geçer.
 			continue;
 		if(start == 0 && (*lex_table)->type != SIGN_PIPE) //Eğer komutun başındaysak komut yolunu bulmak için fonksiyon çağırılır ve lex
 		//Örneğin "ls -l file.txt > output.txt" komutunda start 0 olduğu için ls komut yolunu bulmak için fonksiyon çağırılır fakat -l bir komut yoluna ihtiyaç duymadığı için start arttırılır ve bu fonksiyon bir daha çalışmaz. 
 		{
-			cmd_expander(&((*lex_table)->content));
+			cmd_expander(&((*lex_table)->content), data);
 			start++;
 		}
 		if((*lex_table)->content) //İlk komuttan sonra gelecek olan flagleri tutmak için önce içeriği var mı diye kontrol edilir, eğer var ise path'ın içine atıyoruz.
@@ -52,18 +52,18 @@ static void	fill_cmdnode(t_cmdlist *cmd_table, t_lexlist **lex_table)
 		cmd_table->command = cmd_table->path[0]; //path[0] = "bin/ls", path[1] = "-l", path[2] = "file.txt"
 }
 
-void	fill_cmdtable(void)
+void	fill_cmdtable(t_data *data)
 {
 	t_cmdlist	*tmp_cmdtable;
 	t_lexlist	*tmp_lextable;
 
-	if(!g_data.cmd_table)
+	if(!data->cmd_table)
 		return ;
-	tmp_cmdtable = g_data.cmd_table;
-	tmp_lextable = g_data.lex_table;
+	tmp_cmdtable = data->cmd_table;
+	tmp_lextable = data->lex_table;
 	while(tmp_cmdtable)
 	{
-		fill_cmdnode(tmp_cmdtable, &tmp_lextable); //Her iterasyonda bir komut düğümünü doldurmak için bu fonksiyonu kullanıyoruz.
+		fill_cmdnode(tmp_cmdtable, &tmp_lextable, data); //Her iterasyonda bir komut düğümünü doldurmak için bu fonksiyonu kullanıyoruz.
 		if(tmp_lextable && *tmp_lextable->content == *PIPE) //Eğer gelen düğüm PIPE ise bir sonraki düğüme geç.
 			tmp_lextable = tmp_lextable->next;
 		tmp_cmdtable = tmp_cmdtable->next;

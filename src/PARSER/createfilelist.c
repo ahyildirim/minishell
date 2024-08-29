@@ -23,7 +23,7 @@ static t_filelist	*add_filelist_node(t_filelist **file_list, char *file_name, ch
 	return(new_node); //Oluşturulan son node'u döndür.
 }
 
-int	create_filelist(t_cmdlist *cmd_table, t_lexlist **lex_table)
+int	create_filelist(t_cmdlist *cmd_table, t_lexlist **lex_table, t_data *data)
 {
 	char		*meta_char;
 	char		*file_name;
@@ -31,7 +31,7 @@ int	create_filelist(t_cmdlist *cmd_table, t_lexlist **lex_table)
 
 	if((*lex_table)->type == TEXT) //Eğer gelen ilk lex düğümü TEXT ise dosya oluşturulamayacağı için programdan çık.
 		return (0);
-	meta_char = is_meta_char((*lex_table)->content); //Meta karakterin hangisi olduğunu bul.
+	meta_char = is_meta_char((*lex_table)->content, data); //Meta karakterin hangisi olduğunu bul.
 	file_name = NULL; //Dosya adını boşalt.
 	if((*lex_table)->next) //Eğer lex table'da sonraki var ise dosyanın ismi vardır, bu yüzden dosya ismini belirle.
 		file_name = (*lex_table)->next->content;
