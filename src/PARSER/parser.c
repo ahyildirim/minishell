@@ -17,6 +17,7 @@ static void create_cmd_nodes(int pipe_count, t_data *data)
 
 	data->cmd_table = (t_cmdlist *)malloc(sizeof(t_cmdlist)); //yer aç
 	init_cmdnode(data->cmd_table); //ilk komut için node oluştur.
+	tmp_cmdtable = data->cmd_table;
 	while(--pipe_count) //kalanlar için node oluştur.
 	{
 		tmp_cmdtable->next = (t_cmdlist *)malloc(sizeof(t_cmdlist));

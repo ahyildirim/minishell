@@ -16,7 +16,7 @@ static t_filelist	*add_filelist_node(t_filelist **file_list, char *file_name, ch
 		return (new_node); //Oluştuurlan node'u döndür
 	}
 	last_node = *file_list; //Son node değişkenine ilk node'u at
-	while(last_node)
+	while(last_node->next)
 		last_node = last_node->next; //Son node değişkenini liste bitene kadar ilerlet.
 	last_node->next = new_node; //En sondan sonraki node'u yeni oluşturulan node olarak belirle
 	new_node->fd = 0; //fd'yi 0 a eşitle

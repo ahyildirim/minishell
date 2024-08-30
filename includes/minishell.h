@@ -50,5 +50,6 @@ size_t		ft_strlen(const char *s);
 
 
 void print_lexer(t_data *data);
+void	print_parser(t_data *data);
 
 #endif

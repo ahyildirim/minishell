@@ -22,6 +22,7 @@ SRC        :=      src/EXPANDER/clearemptylextables.c \
                           src/MAIN/main.c \
                           src/MAIN/signal.c \
                           src/PARSER/createfilelist.c \
+                          src/PARSER/printparser.c \
                           src/PARSER/fillcmdtable.c \
                           src/PARSER/parser.c \
                           src/STRING/strappendchar.c \
@@ -57,7 +58,7 @@ $(READLINE):
 $(NAME): $(OBJS)
 	@echo "$(BOLD)$(YELLOW)[COMPILING...]$(RESET)"
 	@sleep 0.5
-	@$(CC) -o $(NAME) $(OBJS) $(CFLAGS) -I${PWD}/lib/readline/include/ -lreadline -L${PWD}/lib/readline/lib
+	@$(CC) -o $(NAME) $(OBJS) $(CFLAGS) -I${PWD}/lib/readline/include/ -lreadline -L${PWD}/lib/readline/lib -ltermcap
 	@clear
 	@echo "$(BOLD)$(YELLOW)[COMPILATION COMPLETE]$(RESET)"
 

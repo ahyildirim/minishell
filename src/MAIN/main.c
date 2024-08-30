@@ -5,9 +5,11 @@ int	g_sig = 0;
 void	minishell_func(t_data *data)
 {
 	add_history(data->input);
-	//parser(data);
 	lexer(data);
+	expander(data);
+	parser(data);
 	print_lexer(data);
+	print_parser(data);
 	//heredoc
 	//free
 	//execute
