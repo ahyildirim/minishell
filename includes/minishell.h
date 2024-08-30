@@ -50,6 +50,10 @@ size_t		ft_strlen(const char *s);
 
 
 void print_lexer(t_data *data);
+<<<<<<< HEAD
 void	print_parser(t_data *data);
+=======
+void print_cmd(t_data *data);
+>>>>>>> 7a66408849a682e30bf278918fbac5be22383bfa
 
 #endif
