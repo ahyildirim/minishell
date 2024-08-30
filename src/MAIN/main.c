@@ -6,16 +6,10 @@ void	minishell_func(t_data *data)
 {
 	add_history(data->input);
 	lexer(data);
-<<<<<<< HEAD
 	expander(data);
 	parser(data);
 	print_lexer(data);
 	print_parser(data);
-=======
-	parser(data);
-	print_lexer(data);
-	print_cmd(data);
->>>>>>> 7a66408849a682e30bf278918fbac5be22383bfa
 	//heredoc
 	//free
 	//execute
