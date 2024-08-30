@@ -13,15 +13,20 @@
 
 extern		int g_sig;
 
-size_t		trim_left_spaces(char **command);
+int			create_filelist(t_cmdlist *cmd_table, t_lexlist **lex_table, t_data *data);
+int			print_lex_error(t_lexlist *lex_table);
+int			ft_strcmp(char *str1, char *str2);
 
-t_lexlist	*add_lex_node(t_lexlist **node);
+size_t		trim_left_spaces(char **command);
+size_t		ft_strlen(const char *s);
+
 
 char		*ft_strlcpy(char *dst, char *src, int len);
 char		*is_meta_char(char *command, t_data *data);
 char		*ft_itoa(int n);
 char		*get_arg(t_data *data);
 char		*ft_strdup(const char *src);
+char		*get_env_name(char *content);
 
 void		*ft_memcpy(void *dest, const void *src, size_t n);
 void		create_lexlist(char *command, t_lexlist **lex_table, t_data *data);
@@ -41,12 +46,10 @@ void		handle_signal(void);
 void		init_metachars(t_data *data);
 void		ft_putstr_fd(char *s, int fd);
 void		parser(t_data *data);
+void		fill_envs(t_data *data, char **env);
 
-int			create_filelist(t_cmdlist *cmd_table, t_lexlist **lex_table, t_data *data);
-int			print_lex_error(t_lexlist *lex_table);
-int			ft_strcmp(char *str1, char *str2);
 
-size_t		ft_strlen(const char *s);
+t_lexlist	*add_lex_node(t_lexlist **node);
 
 
 void print_lexer(t_data *data);

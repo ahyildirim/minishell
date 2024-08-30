@@ -29,6 +29,8 @@ SRC        :=      src/EXPANDER/clearemptylextables.c \
                           src/STRING/trimleft.c \
                           src/UTILS/error.c \
                           src/UTILS/ismetachar.c \
+                          src/ENV/fillenv.c \
+                          src/ENV/getenvname.c \
 
 CFLAGS = -Wall -Wextra -Werror -g #-fsanitize=address # MallocStackLogging=1
 READLINE = lib/readline/lib/libreadline.a
