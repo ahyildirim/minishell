@@ -5,7 +5,7 @@ t_lexlist *add_lex_node(t_lexlist **node)
 	t_lexlist *new;
 	t_lexlist *temp;
 
-	new = malloc(sizeof(t_lexlist));
+	new = (t_lexlist *)malloc(sizeof(t_lexlist));
 	if (!new)
 		return (NULL); // malloc başarısız olursa NULL döner
 	new->content = NULL;

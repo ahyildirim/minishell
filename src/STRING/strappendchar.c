@@ -2,30 +2,29 @@
 
 void str_append_char(char **dst, char c)
 {
-    size_t len = (*dst) ? strlen(*dst) : 0; // Mevcut uzunluğu al
-    char *updated_str = malloc(len + 2); // 1 karakter ve 1 null terminatör için yer ayır
+    size_t	len;
+    char	*updated_str;
+    char	*tmp_src;
+    char	*tmp_dst;
+
+    len = 0;
+    if (*dst)
+        len = strlen(*dst);
+    updated_str = malloc(len + 2); // Ekstra karakter ve null terminatör için yer aç
     if (!updated_str)
     {
         perror("malloc failed");
         exit(EXIT_FAILURE);
     }
-
-    // Mevcut karakterleri yeni belleğe kopyala
+    tmp_dst = updated_str;
     if (*dst)
     {
-        char *tmp_src = *dst;
-        char *tmp_dst = updated_str;
+        tmp_src = *dst;
         while (*tmp_src)
-        {
             *tmp_dst++ = *tmp_src++;
-        }
-        free(*dst); // Eski belleği serbest bırak
+        free(*dst);
     }
-
-    // Yeni karakteri ve null terminatörü ekle
-    updated_str[len] = c;
-    updated_str[len + 1] = '\0';
-
-    *dst = updated_str; // Yeni belleği `*dst` işaretçisine ata
+    *tmp_dst++ = c;
+    *tmp_dst = '\0';
+    *dst = updated_str;
 }
-

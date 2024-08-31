@@ -36,7 +36,7 @@ static void	handle_question_mark(char **dst, char **src, t_data *data)
 static void	handle_double_dollar(char **dst, char **src, t_data *data)
 {
 	char	*ret;
-
+	
 	ret = ft_itoa(data->main_pid);
 	ft_strjoin(dst, ret);
 	free(ret);
