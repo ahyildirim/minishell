@@ -65,7 +65,7 @@ static void	parse_command(char **command, t_lexlist *last_node, t_data *data)
 	char	*temp;
 
 	len = get_command_len(*command, data); //Command stringinin boyutunu öğrenmemiz için gerekli fonksiyon.
-	temp = malloc(len + 1);
+	temp = (char *)malloc(len + 1);
 	last_node->content = temp; //Contenti burada recursive bir şekilde dolduruyoruz.
 	temp[len] = 0;
 	while(len--)

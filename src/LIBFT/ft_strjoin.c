@@ -9,8 +9,12 @@ void	ft_strjoin(char **dst, char *src)
 
 	if(!*dst && !src)
 		return ;
-	len = ft_strlen(*dst) + ft_strlen(src);
-	str = malloc(len + 1);
+	len = 0;
+	if(*dst)
+		len += ft_strlen(*dst);
+	if(src)
+		len += ft_strlen(src);
+	str = (char *)malloc(len + 1);
 	str[len] = 0;
 	tmp_str = str;
 	tmp_dst = *dst;

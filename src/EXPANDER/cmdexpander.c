@@ -8,20 +8,23 @@ static char	*get_env_content(char **envs, char *arg_name)
 
 	len = 0;
 	temp_envs = *envs;
-	while(**envs && **envs != ':') // /usr/local/sbin:/usr/local/bin: örneğinde : gelene kadar yolun boyutunu alır.
+	while(*temp_envs && *temp_envs != ':') // /usr/local/sbin:/usr/local/bin: örneğinde : gelene kadar yolun boyutunu alır.
 	{
 		len++;
+		temp_envs++;
 		(*envs)++;
 	}
 	if(!len) //Eğeer iki nokta yoksa geçerli bir yol değildir ve NULL döndürür
 		return (NULL);
-	ptr = malloc(len + 1); //ptr için boyut kadar yer aç.
-	ft_strlcpy(ptr, temp_envs, len + 1); //ptr'nin içine yolu kopyalar.
-	str_append_char(&ptr, '/'); // :'dan sonraki / karakterini ekler.
-	ft_strjoin(&ptr, arg_name); //Gelen komutu en sona ekler, örneğin ls yazdığımızı ele alalım; 
-	//usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/go/bin yolunu alır, sonuna / koyar ve ls komutunu yapıştırıp döndürür.
-	if(**envs == ':') //eğer karkater : ise bir sonraki iterasyonun hatasız olması için atlamamız gerekir.
+	if(**envs) //eğer karkater : ise bir sonraki iterasyonun hatasız olması için atlamamız gerekir.
 		(*envs)++;
+	ptr = (char *)malloc(len + 1); //ptr için boyut kadar yer aç.
+	ptr[len] = '\0';
+	while(--len > -1)
+		ptr[len] = *(--temp_envs);
+	str_append_char(&ptr, '/'); // :'dan sonraki / karakterini ekler.
+	ft_strjoin(&ptr, arg_name); //Gelen komutu en sona ekler, örneğin ls yazdığımızı ele alalım;
+	//usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/go/bin yolunu alır, sonuna / koyar ve ls komutunu yapıştırıp döndürür.
 	return (ptr);
 }
 
