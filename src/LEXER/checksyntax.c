@@ -20,26 +20,26 @@ static int complete_arg(t_lexlist *lex_table, t_data *data)
 static int	check_pipe_error(t_lexlist *lex_table, t_data *data)
 {
 	if(lex_table->next && lex_table->next->type == SIGN_PIPE) //pipe'dan sonra bir tane daha pipe karakteri var ise hata ver.
-		return (print_lex_error(lex_table));
+		return (print_lex_error(lex_table, data));
 	else if(!lex_table->next) //pipe'dan sonra eksik bir komut veya argüman var ise tamamlamaya çalış (ls | ca) örneğinde pipedan hemen sonra gelen ca harflerini okur ve parse'lama işlemini baştan yapmaya çalışır.
 		return (complete_arg(lex_table, data));
 	return (1);
 }
 
-static int	check_file(t_lexlist *lex_table)
+static int	check_file(t_lexlist *lex_table, t_data *data)
 {
 	if(!lex_table->next || (lex_table->next && lex_table->next->type != TEXT)) //Node'un nexti yok ise veya var ise de conteni text değil ise;
 	{
 		if(lex_table->next) //Nexti var ise (> <<, >> <, etc.)
 		{
 			print_error("-bash syntax error near unexpected token '", lex_table->next->content, "'\n");
-			//TODO
+			lexer_free_no_heradoc(lex_table, data);
 			return (1);
 		}
 		else //Nexti yok ise (>>, <<, <, etc.)
 		{
 			print_error("-bash syntax error near unexpected token '", "newline", "'\n");
-			//TODO
+			lexer_free_no_heradoc(lex_table, data);
 			return (1);
 		}
 	}
@@ -52,12 +52,12 @@ static int	check_errors(t_lexlist *lex_table, t_data *data)
 
 	if(lex_table == data->lex_table && lex_table->type == SIGN_PIPE) //Bu fonksiyona gelen node ilk node'mu kontrolü yap ve yazılan ilk eleman (ilk node) type'ı eğer PIPE(|) ise error ver (| cat).
 	{
-		print_lex_error(lex_table);
+		print_lex_error(lex_table, data);
 		return (-1);
 	}
 	else if(lex_table->type != TEXT && lex_table->type != SIGN_PIPE) //Node'un type'ı text değil ise ve pipe değil ise ne olduğunu kontrol et (>, <, >> etc.).
 	{
-		if(check_file(lex_table))
+		if(check_file(lex_table, data))
 			return(-1);
 	}
 	else if(lex_table->type == SIGN_PIPE) //Gelen node'un type'ı pipe ise(ls | cat);

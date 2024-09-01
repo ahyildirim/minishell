@@ -22,7 +22,7 @@ static int	is_valid_arg(char *str)
 	return (1);
 }
 
-static void	read_arg_value(int *fd)
+static void	read_arg_value(int *fd, t_data *data)
 {
 	char	*str;
 
@@ -36,8 +36,8 @@ static void	read_arg_value(int *fd)
 		write(fd[1], str, ft_strlen(str)); //girilen argümanı write ile fd[1]'e yazdır.
 		close(fd[1]);
 		free(str);
-		//free_loop(); //TODO
-		//free_table(); //TODO
+		free_loop(data);
+		free_utils(data);
 		exit(EXIT_SUCCESS);
 	}
 }
@@ -50,7 +50,7 @@ static int	read_arg(int *fd, t_data *data)
 	pid = fork(); //fork ile bir child process oluştur.
 	data->is_reading = 1; //Sanırım ileride gerekli olacak bir kontrol?
 	if(pid == 0) //Child process içinde girilen argümanı yazmak için bir fonksiyon kullan.
-		read_arg_value(fd);
+		read_arg_value(fd, data);
 	close(fd[1]);
 	waitpid(pid , &ret, 0);  //child processin bitmesini bekle, ret değerine hangi değerle çıktığını al.
 	data->is_reading = 0;
@@ -59,7 +59,7 @@ static int	read_arg(int *fd, t_data *data)
 	{
 		close(fd[0]);
 		//update_history(data->input); //TODO
-		//free_loop(); //TODO
+		free_loop(data);
 		return (0);
 	}
 	return (1);

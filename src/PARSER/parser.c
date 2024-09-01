@@ -47,5 +47,5 @@ void	parser(t_data *data)
 	data->cmd_table = NULL;
 	create_cmdlist(data->lex_table, data);
 	fill_cmdtable(data);
-	//create_files(data->cmd_table); //TODO
+	create_files(data->cmd_table, data);
 }
