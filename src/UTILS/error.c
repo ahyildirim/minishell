@@ -10,9 +10,10 @@ void	print_error(char *str1, char *str2, char *str3)
 		write(2, str3, ft_strlen(str3));
 }
 
-int	print_lex_error(t_lexlist *lex_table)
+int	print_lex_error(t_lexlist *lex_table, t_data *data)
 {
 	print_error("-bash: syntax error near unexpected token '", lex_table->content, "'\n");
-	//TODO
+	data->output = 2;
+	lexer_free_no_heradoc(lex_table, data);
 	return (0);
 }

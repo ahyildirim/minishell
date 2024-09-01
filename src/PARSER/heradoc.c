@@ -49,7 +49,7 @@ static char	*get_heradoc_values(char *eof)
 	return (line);
 }
 
-static void	fill_heradoc(char *eof, int *fd)
+static void	fill_heradoc(char *eof, int *fd, t_data *data)
 {
 	char	*lines;
 
@@ -58,8 +58,8 @@ static void	fill_heradoc(char *eof, int *fd)
 	write(fd[1], lines, ft_strlen(lines)); //Heradoc içindeki değerleri pipe'ın yazma ucuna yani fd[1]'e yazdır.
 	close(fd[1]); //BU fonksiyonda fd[1] ile işimiz kalmadığı için kapat.
 	free(lines);
-	//free_loop(); //TODO
-	//free_table(); //TODO
+	free_loop(data);
+	free_utils(data);
 	exit(EXIT_SUCCESS);
 }
 
@@ -73,7 +73,7 @@ static int	read_heradoc_value(t_cmdlist *cmd_table, char *eof, t_data *data)
 	pid = fork(); //Girilen değerleri almak için bir childp process oluşturuyoruz.
 	data->is_reading = 1; //Okuyor flag'ini 1 yapyıoruz.
 	if(pid == 0)
-		fill_heradoc(eof, fd); //Child process içinde heradoc'un içeriğini dolduruyoruz
+		fill_heradoc(eof, fd, data); //Child process içinde heradoc'un içeriğini dolduruyoruz
 	close(fd[1]); //yazma ile işimiz olmadığı için fd[1]'i kapat.
 	waitpid(pid, &ret, 0); //child process'in işinin bitmesini bekle ve fonksiyondan çıkan sinyali ret'in içine at.
 	data->is_reading = 0; //Okuma flag'ini 0 la;
@@ -82,7 +82,7 @@ static int	read_heradoc_value(t_cmdlist *cmd_table, char *eof, t_data *data)
 	{
 		close(fd[0]);
 		//update_history(data->input); //TODO
-		//free_loop(); //TODO
+		free_loop(data);
 		return (0);
 	}
 	set_heradoc_values(cmd_table, fd, data); //Yazılan değerleri okuyup inputa aktar.
@@ -93,9 +93,13 @@ void	start_heradoc(t_cmdlist *cmd_table, t_data *data)
 {
 	t_filelist	*tmp;
 
+	if(!cmd_table)
+		return;
 	while(cmd_table) //tüm cmd node'ların içinde gezerek herhangi birinde "<<" var mı diye bakıyoruz. Çünkü heradoc [COMMAND] << EOF şeklinde çalışıyor.
 	{
 		tmp = cmd_table->files;
+		if(!tmp)
+			return;
 		while(tmp)
 		{
 			if(tmp->meta_char[1] == DOUBLE_LESS[1]) //Eğer "<<" var ise heradoc değerlerini okumaya başlıyoruz.
