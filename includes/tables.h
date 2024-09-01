@@ -45,6 +45,7 @@ typedef struct s_data
 	int			output;
 	int			main_pid;
 	int			heradoc_fd;
+	int			cnt_pipe;
 	t_lexlist	*lex_table;
 	t_env		*env_table;
 	t_cmdlist	*cmd_table;

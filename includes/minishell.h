@@ -21,7 +21,7 @@ int			ft_strcmp(char *str1, char *str2);
 size_t		trim_left_spaces(char **command);
 size_t		ft_strlen(const char *s);
 
-
+char 		**convert_env_table_to_envp(t_env *env_table);
 char		*ft_strlcpy(char *dst, char *src, int len);
 char		*is_meta_char(char *command, t_data *data);
 char		*get_env_name(char *content);
@@ -43,8 +43,10 @@ void		fill_envs(t_data *data, char **env);
 void		clear_empty_lextables(t_data *data);
 void		str_append_char(char **dst, char c);
 void		ft_strjoin(char **dst, char *src);
+void		close_unused_file_descriptors();
 void		ft_putstr_fd(char *s, int fd);
 void		init_metachars(t_data *data);
+void		main_executor(t_data *data);
 void		fill_cmdtable(t_data *data);
 void		check_syntax(t_data *data);
 void		free_utils(t_data *data);

@@ -36,6 +36,8 @@ SRC        :=      src/EXPANDER/clearemptylextables.c \
                           src/UTILS/freeutils.c \
                           src/ENV/fillenv.c \
                           src/ENV/getenvname.c \
+                          src/EXECUTOR/exec_util.c \
+                          src/EXECUTOR/executor.c \
 
 CFLAGS = -Wall -Wextra -Werror -g #-fsanitize=address # MallocStackLogging=1
 READLINE = lib/readline/lib/libreadline.a

@@ -1,4 +1,4 @@
-prefix=/home/ahyildir/Masaüstü/minirepo/lib/readline
+prefix=/Users/ekin/Desktop/minishell/lib/readline
 exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
 includedir=${prefix}/include

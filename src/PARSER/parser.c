@@ -39,6 +39,7 @@ static void	create_cmdlist(t_lexlist *lex_table, t_data *data)
 			pipe_count++;
 		lex_table = lex_table->next;
 	}
+	data->cnt_pipe = pipe_count;
 	create_cmd_nodes(pipe_count, data); //Node'ları oluşturuyoruz.
 }
 
