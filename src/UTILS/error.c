@@ -17,3 +17,9 @@ int	print_lex_error(t_lexlist *lex_table, t_data *data)
 	lexer_free_no_heradoc(lex_table, data);
 	return (0);
 }
+int	quote_error(t_lexlist *lex_table, t_data *data)
+{
+	ft_putstr_fd("Syntax error with quotes.\n", 2);
+	lexer_free_no_heradoc(lex_table, data);
+	return 0;
+}

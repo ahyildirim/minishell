@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-static size_t get_quote_len(const char *command)
+static size_t get_quote_len(const char *command, t_lexlist *lex, t_data *data)
 {
     size_t len = 0;
     char c;
@@ -25,7 +25,7 @@ static size_t get_quote_len(const char *command)
         command++;
     }
     if (*command == '\0')
-        ft_putstr_fd("Syntax error with quotes.\n", 2);
+        quote_error(lex, data);
     return len;
 }
 
@@ -48,7 +48,7 @@ static size_t	get_command_len(char *command, t_data *data)
 		}
 		if(*command == *SINGLE_QUOTE || *command == *DOUBLE_QUOTE)
 		{
-			quote_len = get_quote_len(command); //eğer ' veya " bulunuyor ise bu işaretin aynısına gelene kadar boyutunu ölçüyoruz.
+			quote_len = get_quote_len(command, data->lex_table, data); //eğer ' veya " bulunuyor ise bu işaretin aynısına gelene kadar boyutunu ölçüyoruz.
 			len += quote_len; //Total boyutumuzu üstteki fonksiyondan bulduğumuz değere ekliyoruz.
 			command += quote_len; //Stringi üstteki fonksiyondan bulduğumuz değer kadar ilerletiyoruz.
 			continue ;

@@ -1,5 +1,15 @@
 #include "../../includes/minishell.h"
 
+void	free_env_cpy(char **envlist)
+{
+	char	**temp_envlist;
+
+	temp_envlist = envlist;
+	while (*temp_envlist)
+		free(*(temp_envlist++));
+	free(envlist);
+}
+
 void	free_envtable(t_data *data)
 {
 	t_env	*env;

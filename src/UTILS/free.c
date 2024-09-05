@@ -51,6 +51,13 @@ static void	free_lexer(t_data *data)
 	data->lex_table = NULL;
 }
 
+void	free_core(t_data *data)
+{
+	free_metachars(data);
+	free_envtable(data);
+	rl_clear_history();
+}
+
 void	free_loop(t_data *data)
 {
 	if(data->input)
