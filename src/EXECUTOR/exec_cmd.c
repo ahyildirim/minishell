@@ -44,19 +44,19 @@ static char	**get_env_cpy(t_data *data)
 	
 }
 
-static void	run_execve(t_data *data, int *fd, int fd_index)
+static void	run_execve(t_data *data, t_cmdlist *cmd, int *fd, int fd_index)
 {
 	char	**envlist;
 
-	data->cmd_table->pid = fork();
-	if (!data->cmd_table->pid)
+	cmd->pid = fork();
+	if (!cmd->pid)
 	{
-		create_dup(data->cmd_table, data, fd, fd_index);
+		create_dup(cmd, data, fd, fd_index);
 		envlist = get_env_cpy(data);
-		if (execve(data->cmd_table->command, data->cmd_table->path, envlist) == -1)	
+		if (execve(cmd->command, cmd->path, envlist) == -1)	
 		{
-			if (data->cmd_table->command)
-				print_error(data->cmd_table->command, " command not found\n", NULL);
+			if (cmd->command)
+				print_error(cmd->command, " command not found\n", NULL);
 			free_env_cpy(envlist);
 			free_loop(data);
 			free_core(data);
@@ -65,7 +65,7 @@ static void	run_execve(t_data *data, int *fd, int fd_index)
 	}
 	if (fd && data->cmd_table->pid)
 		clear_pipe(fd);
-	waitpid(data->cmd_table->pid, &data->last_output, 0);
+	waitpid(cmd->pid, &data->last_output, 0);
 	data->last_output = WEXITSTATUS(data->last_output);
 	
 }
@@ -85,17 +85,17 @@ char	*get_cmd(char *cmd)
 	return (cmd - cmd_len);
 }
 
-void exec_command(t_data *data, int *fd, int fd_index)
+void exec_command(t_data *data, t_cmdlist *cmd_l, int *fd, int fd_index)
 {
 	char	*cmd;
 	int		builtin_index;
 
-	if (data->cmd_table && !data->cmd_table->command)
+	if (cmd_l && !cmd_l->command)
 		return ;
-	cmd = get_cmd(data->cmd_table->command);
+	cmd = get_cmd(cmd_l->command);
 	builtin_index = is_builtin(cmd);
 	if (builtin_index)
-		run_builtin(data, builtin_index);
+		run_builtin(data, cmd_l, builtin_index, fd, fd_index);
 	else
-		run_execve(data, fd, fd_index);
+		run_execve(data, cmd_l, fd, fd_index);
 }

@@ -1,9 +1,9 @@
 #include "../../includes/minishell.h"
 
-void	run_process(t_data *data, int *fd, int fd_index)
+void	run_process(t_data *data, t_cmdlist *cmd, int *fd, int fd_index)
 {
-	if (data->cmd_table->input_file != SSTDERR && data->cmd_table->output_file != SSTDERR)
-		exec_command(data, fd, fd_index);
+	if (cmd->input_file != SSTDERR && cmd->output_file != SSTDERR)
+		exec_command(data, cmd, fd, fd_index);
 	else
 		clear_pipe(fd);
 	free_loop(data);

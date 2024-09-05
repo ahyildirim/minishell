@@ -19,17 +19,10 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
-void	run_builtin(t_data *data, int builtin)//TODO
-{
-	printf("Running builtin command: %d\n", builtin);
-
-	if (data->cmd_table->input_file != -1) 
-        dup2(data->cmd_table->input_file, STDIN_FILENO);  // Input yönlendirme
-    if (data->cmd_table->output_file != -1)
-        dup2(data->cmd_table->output_file, STDOUT_FILENO);
-	
-	/* if (fd)
-		create_dup(data->cmd_table, data, fd, fd_index); */
+void	run_builtin(t_data *data, t_cmdlist *cmd, int builtin, int *fd, int fd_index)//TODO
+{	
+	if (fd)
+		create_dup(cmd, data, fd, fd_index);
 	if (builtin == ECHO)
 		printf("ECHO");
 	else if (builtin == CD)
@@ -41,12 +34,7 @@ void	run_builtin(t_data *data, int builtin)//TODO
 	else if (builtin == UNSET)
 		printf("UNSET");
 	else if (builtin == ENV)
-		com_env(data->cmd_table, data);
+		com_env(cmd, data);
 	else if (builtin == EXIT)
 		printf("EXIT");
-	
-	if (data->cmd_table->input_file != -1)
-        close(data->cmd_table->input_file);
-    if (data->cmd_table->output_file != -1)
-        close(data->cmd_table->output_file);
 }
