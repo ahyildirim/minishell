@@ -8,8 +8,8 @@ void	minishell_func(t_data *data)
 	lexer(data);
 	expander(data);
 	parser(data);
-	//print_lexer(data);
-	//print_parser(data);
+	print_lexer(data);
+	print_parser(data);
 	main_executor(data);
 	//heredoc
 	//free

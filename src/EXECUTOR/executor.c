@@ -3,6 +3,7 @@
 void execute_command(t_cmdlist *cmd, t_data *data) 
 {
 	char **envp = convert_env_table_to_envp(data->env_table); // Çevre değişkenlerini al
+	char *buildtincmd;
 	pid_t pid = fork();
 
 	if (pid == 0) 
@@ -12,11 +13,26 @@ void execute_command(t_cmdlist *cmd, t_data *data)
 		if (cmd->output_file != -1)
 			dup2(cmd->output_file, STDOUT_FILENO);
 		close_unused_file_descriptors();
-		if (execve(cmd->command, cmd->path, envp) < 0) 
+		buildtincmd = get_cmd(cmd->command);
+		int is_b = is_builtin(buildtincmd);
+		if (is_b)
 		{
-			perror("execve");
-			exit(EXIT_FAILURE);
+			printf("cmdbuilt : %s\n", cmd->command);
+			print_parser(data);
+			run_builtin(data, is_b);
+			exit(EXIT_SUCCESS);
 		}
+		else
+		{
+			printf("cmdexec : %s\n", cmd->command);
+			print_parser(data);
+			if (execve(cmd->command, cmd->path, envp) < 0) 
+			{
+				perror("execve");
+				exit(EXIT_FAILURE);
+			}
+		}
+		
 	}
 	else if (pid > 0)// Parent process
 		waitpid(pid, NULL, 0); // Çocuk sürecini bekle
@@ -28,7 +44,7 @@ void execute_command(t_cmdlist *cmd, t_data *data)
 	free(envp);
 }
 
-void execute_pipeline(t_data *data) 
+static void	run_multiple(t_data *data)
 {
 	int fd[2];
 	int input_fd = STDIN_FILENO;
@@ -54,14 +70,22 @@ void execute_pipeline(t_data *data)
 		input_fd = fd[0]; 
 		cmd_table = cmd_table->next;
 	}
-	if (input_fd != STDIN_FILENO) // Son pipe'ın okuma ucu kapatılır
+	if (input_fd != STDIN_FILENO)
 		close(input_fd);
+}
+
+static void run_single(t_data *data, int *fd)
+{
+	if (data->cmd_table->input_file != SSTDERR && data->cmd_table->output_file != SSTDERR)
+		exec_command(data, fd, -1);
 }
 
 void main_executor(t_data *data)
 {
-	if (data->cnt_pipe == 1)
-		execute_command(data->cmd_table, data);//todo
+	if (!data->cmd_table)
+		return ;
+	else if (data->cnt_pipe == 1)
+		run_single(data, NULL);//TODO builtin
 	else
-		execute_pipeline(data);
+		run_multiple(data);//TODO
 }
