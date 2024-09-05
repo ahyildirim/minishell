@@ -1,91 +1,70 @@
 #include "../../includes/minishell.h"
 
-void execute_command(t_cmdlist *cmd, t_data *data) 
+static int	*create_pipe()
 {
-	char **envp = convert_env_table_to_envp(data->env_table); // Çevre değişkenlerini al
-	char *buildtincmd;
-	pid_t pid = fork();
+	int	i;
+	int	*fd;
 
-	if (pid == 0) 
-	{ // Child process
-		if (cmd->input_file != -1) 
-			dup2(cmd->input_file, STDIN_FILENO);
-		if (cmd->output_file != -1)
-			dup2(cmd->output_file, STDOUT_FILENO);
-		close_unused_file_descriptors();
-		buildtincmd = get_cmd(cmd->command);
-		int is_b = is_builtin(buildtincmd);
-		if (is_b)
-		{
-			printf("cmdbuilt : %s\n", cmd->command);
-			print_parser(data);
-			run_builtin(data, is_b);
-			exit(EXIT_SUCCESS);
-		}
-		else
-		{
-			printf("cmdexec : %s\n", cmd->command);
-			print_parser(data);
-			if (execve(cmd->command, cmd->path, envp) < 0) 
-			{
-				perror("execve");
-				exit(EXIT_FAILURE);
-			}
-		}
-		
-	}
-	else if (pid > 0)// Parent process
-		waitpid(pid, NULL, 0); // Çocuk sürecini bekle
-	else 
-	{
-		perror("fork");
-		exit(EXIT_FAILURE);
-	}
-	free(envp);
+	fd = (int *)malloc(sizeof(int) * 6);
+	i = -1;
+	while (++i < 6)
+		fd[i] = 0;
+	return (fd);
 }
 
-static void	run_multiple(t_data *data)
+static void	switch_pipe(int **fd)
 {
-	int fd[2];
-	int input_fd = STDIN_FILENO;
-	t_cmdlist *cmd_table = data->cmd_table;
-	while (cmd_table)
+	(*fd)[0] = (*fd)[0] ^ (*fd)[2];
+	(*fd)[2] = (*fd)[0] ^ (*fd)[2];
+	(*fd)[0] = (*fd)[0] ^ (*fd)[2];
+	(*fd)[1] = (*fd)[1] ^ (*fd)[3];
+	(*fd)[3] = (*fd)[1] ^ (*fd)[3];
+	(*fd)[1] = (*fd)[1] ^ (*fd)[3];
+	(*fd)[5] = (*fd)[5] ^ (*fd)[3];
+	(*fd)[3] = (*fd)[5] ^ (*fd)[3];
+	(*fd)[5] = (*fd)[5] ^ (*fd)[3];
+	(*fd)[4] = (*fd)[2] ^ (*fd)[4];
+	(*fd)[2] = (*fd)[2] ^ (*fd)[4];
+	(*fd)[4] = (*fd)[2] ^ (*fd)[4];
+
+}
+static void	run_multiple(t_data *data, t_cmdlist *cmd_list)
+{
+	int	*fd;
+
+	fd = create_pipe();
+	while (cmd_list)
 	{
-		if (cmd_table->next)
+		switch_pipe(&fd);
+		pipe(&fd[2]);
+		cmd_list->pid = fork();
+		if (cmd_list->pid <= 0)
+			run_process(data, cmd_list, fd, 2);
+		cmd_list = cmd_list->next;
+		if (fd[4] && fd[5])
 		{
-			if (pipe(fd) == -1)
-			{
-				perror("pipe");
-				exit(EXIT_FAILURE);
-			}
-			cmd_table->output_file = fd[1]; // Pipe'in yazma ucu
+			close(fd[4]);
+			close(fd[5]);
+			fd[4] = 0;
+			fd[5] = 0;
 		}
-		else
-			cmd_table->output_file = STDOUT_FILENO; // Son komutun çıkışı, stdout'a yönlendir
-		cmd_table->input_file = input_fd; // Mevcut komutun girişi
-		execute_command(cmd_table, data);
-		if (cmd_table->next)
-			close(fd[1]); // Pipe'in yazma ucu, bir sonraki komutun çalışması için kapatılır
-		// Pipe'ın okuma ucu, bir sonraki komutun girişi olarak kullanılır
-		input_fd = fd[0]; 
-		cmd_table = cmd_table->next;
 	}
-	if (input_fd != STDIN_FILENO)
-		close(input_fd);
+	clear_pipe(fd);
+	wait_all(data);
 }
 
-static void run_single(t_data *data, int *fd)
+static void run_single(t_data *data, t_cmdlist *cmd, int *fd)
 {
-	if (data->cmd_table->input_file != SSTDERR && data->cmd_table->output_file != SSTDERR)
-		exec_command(data, fd, -1);
+	if (cmd->input_file != SSTDERR && cmd->output_file != SSTDERR)
+		exec_command(data, cmd, fd, -1);
 }
 
 void main_executor(t_data *data)
 {
 	if (!data->cmd_table)
 		return ;
-	else if (data->cnt_pipe == 1)
-		run_single(data, NULL);//TODO builtin
+	else if (!data->cmd_table->next)
+		run_single(data, data->cmd_table, NULL);//TODO builtin
 	else
-		run_multiple(data);//TODO
+		run_multiple(data, data->cmd_table);//TODO
 }
