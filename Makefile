@@ -19,6 +19,8 @@ SRC        :=      src/EXPANDER/clearemptylextables.c \
                           src/LIBFT/ft_strlcpy.c \
                           src/LIBFT/ft_strlen.c \
 						  src/LIBFT/ft_putstr_fd.c \
+                          src/LIBFT/ft_atoi.c \
+                          src/LIBFT/ft_isdigit.c \
                           src/MAIN/init.c \
                           src/MAIN/main.c \
                           src/MAIN/signal.c \
@@ -36,13 +38,19 @@ SRC        :=      src/EXPANDER/clearemptylextables.c \
                           src/UTILS/freeutils.c \
                           src/ENV/fillenv.c \
                           src/ENV/getenvname.c \
+                          src/ENV/builtin_env_funcs.c \
                           src/EXECUTOR/exec_cmd.c \
                           src/EXECUTOR/executor.c \
                           src/EXECUTOR/dup.c \
                           src/EXECUTOR/process.c \
                           src/EXECUTOR/builtin_funcs.c \
-                          src/EXECUTOR/exec_util.c \
                           src/BUILTIN/env.c \
+                          src/BUILTIN/pwd.c \
+                          src/BUILTIN/echo.c \
+                          src/BUILTIN/exit.c \
+                          src/BUILTIN/unset.c \
+                          src/BUILTIN/export.c \
+                          src/BUILTIN/cd.c \
 
 CFLAGS = -Wall -Wextra -Werror -g #-fsanitize=address # MallocStackLogging=1
 READLINE = lib/readline/lib/libreadline.a

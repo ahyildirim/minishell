@@ -11,6 +11,7 @@ void	minishell_func(t_data *data)
 	//print_lexer(data);
 	//print_parser(data);
 	main_executor(data);
+	free_loop(data);
 	//heredoc
 	//free
 	//execute
@@ -24,7 +25,11 @@ void shell_loop(t_data *data)
 		data->input = readline("minishell> ");
 		
 		if (data->input == NULL)
-			break;
+		{
+			ft_putstr_fd("exit\n", 0);
+			rl_clear_history();
+			exit(0);
+		}
 		if (data->input && *data->input)
 		{
 			minishell_func(data);
@@ -39,7 +44,6 @@ int main(int ac, char **av, char **env)
 
 	(void)ac;
 	(void)av;
-	(void)env;
 	handle_signal();
 	data = (t_data *)malloc(sizeof(t_data));
 	if (!data)

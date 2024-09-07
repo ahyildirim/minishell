@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-static t_env *add_new_envnode(t_env **env_table, char *env)
+t_env *add_new_envnode(t_env **env_table, char *env)
 {
 	t_env	*last_node;
 	char	*content;

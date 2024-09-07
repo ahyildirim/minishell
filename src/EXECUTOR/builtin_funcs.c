@@ -24,17 +24,20 @@ void	run_builtin(t_data *data, t_cmdlist *cmd, int builtin, int *fd, int fd_inde
 	if (fd)
 		create_dup(cmd, data, fd, fd_index);
 	if (builtin == ECHO)
-		printf("ECHO");
+		com_echo(cmd);
 	else if (builtin == CD)
-		printf("CD");
+		com_cd(data, cmd);
 	else if (builtin == PWD)
-		printf("PWD");
+		com_pwd();
 	else if (builtin == EXPORT)
-		printf("EXPORT");
+		com_export(cmd, data);
 	else if (builtin == UNSET)
-		printf("UNSET");
+		com_unset(cmd, data);
 	else if (builtin == ENV)
 		com_env(cmd, data);
 	else if (builtin == EXIT)
-		printf("EXIT");
+	{
+		ft_putstr_fd("exit\n", STDOUT_FILENO);
+		com_exit(cmd, data);
+	}
 }
