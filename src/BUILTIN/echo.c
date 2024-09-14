@@ -15,11 +15,11 @@ void	com_echo(t_cmdlist *cmd)
 	while (*path)
 	{
 		if (*path)
-			printf("%s", *path);
+			ft_putstr_fd(*path, cmd->output_file);
 		if (*(++path))
-			printf(" ");
+			ft_putstr_fd(" ", cmd->output_file);
 	}
 	if (!is_n)
-		printf("\n");
+		ft_putstr_fd("\n", cmd->output_file);
 	
 }
