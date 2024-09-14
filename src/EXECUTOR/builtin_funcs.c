@@ -28,7 +28,7 @@ void	run_builtin(t_data *data, t_cmdlist *cmd, int builtin, int *fd, int fd_inde
 	else if (builtin == CD)
 		com_cd(data, cmd);
 	else if (builtin == PWD)
-		com_pwd();
+		com_pwd(cmd);
 	else if (builtin == EXPORT)
 		com_export(cmd, data);
 	else if (builtin == UNSET)

@@ -72,13 +72,13 @@ void		com_echo(t_cmdlist *cmd);
 void		free_utils(t_data *data);
 void		free_loop(t_data *data);
 void		free_core(t_data *data);
+void		com_pwd(t_cmdlist *cmd);
 void		expander(t_data *data);
 void		wait_all(t_data *data);
 void		parser(t_data *data);
 void		lexer(t_data *data);
 void		handle_signal(void);
 void		clear_pipe(int *fd);
-void		com_pwd(void);
 
 t_env *add_new_envnode(t_env **env_table, char *env);
 
