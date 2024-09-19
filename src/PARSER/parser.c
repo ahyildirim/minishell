@@ -9,6 +9,7 @@ static void	init_cmdnode(t_cmdlist *cmd_table)
 	cmd_table->path = NULL;
 	cmd_table->next = NULL;
 	cmd_table->heradoc_values = NULL;
+	cmd_table->files = NULL;
 }
 
 static void create_cmd_nodes(int pipe_count, t_data *data)

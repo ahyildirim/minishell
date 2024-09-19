@@ -81,8 +81,7 @@ static int	read_heradoc_value(t_cmdlist *cmd_table, char *eof, t_data *data)
 	if(ret == SIGNAL_C) //Signal C yakalandı ise çıkış yap.
 	{
 		close(fd[0]);
-		//update_history(data->input); //TODO
-		free_loop(data);
+		update_history(data->input); //TODO
 		return (0);
 	}
 	set_heradoc_values(cmd_table, fd, data); //Yazılan değerleri okuyup inputa aktar.

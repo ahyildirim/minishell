@@ -51,11 +51,31 @@ static void	free_lexer(t_data *data)
 	data->lex_table = NULL;
 }
 
-void	free_core(t_data *data)
+void free_data(t_data *data)
 {
-	free_metachars(data);
-	free_envtable(data);
-	rl_clear_history();
+	if (!data)
+		return;
+	if (data->input)
+		free(data->input);
+	if (data->metachars)
+	{
+		char **meta_chars = data->metachars;
+		while (*meta_chars)
+		{
+			free(*meta_chars);
+			meta_chars++;
+		}
+		free(data->metachars);
+	}
+	if (data->input)
+		free(data->input);
+	if (data->env_table)
+		free_envtable(data);
+	if (data->cmd_table)
+		free_parser(data);
+	if (data->lex_table)
+		free_lexer(data);
+	free(data);
 }
 
 void	free_loop(t_data *data)

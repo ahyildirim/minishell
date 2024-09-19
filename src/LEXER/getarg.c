@@ -58,7 +58,7 @@ static int	read_arg(int *fd, t_data *data)
 	if(ret == SIGNAL_C) //Eğer CTRL+C geldiyse fonksiyondan çık.
 	{
 		close(fd[0]);
-		//update_history(data->input); //TODO
+		update_history(data->input); //TODO
 		free_loop(data);
 		return (0);
 	}

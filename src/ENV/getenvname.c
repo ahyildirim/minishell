@@ -27,5 +27,6 @@ char	*get_env_name(char *content)
 	while(content && *content && *content != '=')
 		*(tmp++) = *(content++);
 	tmp = 0;
+	name[len] = '\0';
 	return (name);
 }

@@ -40,6 +40,14 @@ void	free_metachars(t_data *data)
 	free(data->metachars);
 }
 
+void	free_core(t_data *data)
+{
+	free_metachars(data);
+	free_envtable(data);
+	//free_data(data);
+	rl_clear_history();
+}
+
 void	free_utils(t_data *data)
 {
 	free_metachars(data);
