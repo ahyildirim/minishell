@@ -28,7 +28,10 @@ static void free_parser(t_data *data)
 		if(tmp->path)
 			free(tmp->path);
 		if(tmp->heradoc_values)
+		{
 			free(tmp->heradoc_values);
+			tmp->heradoc_values = NULL;
+		}
 		free(tmp);
 	}
 	data->cmd_table = NULL;

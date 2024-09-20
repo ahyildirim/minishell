@@ -23,7 +23,8 @@ void	create_dup(t_cmdlist *cmd, t_data *data, int *fd, int fd_index)
 	if (cmd->input_file == HERADOC)
 	{
 		pipe(new_fd);
-		write(new_fd[1], cmd->heradoc_values, ft_strlen(cmd->heradoc_values));
+		if (cmd->heradoc_values)
+			write(new_fd[1], cmd->heradoc_values, ft_strlen(cmd->heradoc_values));
 		dup2(new_fd[0], STDIN_FILENO);
 		close(new_fd[1]);
 		close(new_fd[0]);
