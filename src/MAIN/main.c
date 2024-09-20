@@ -69,8 +69,3 @@ int main(int ac, char **av, char **env)
 	free_core(data);
 	return (0);
 }
-
-/* void __attribute__((destructor))destructor(void)
-{
-	system("leaks --quiet minishell");
-} */

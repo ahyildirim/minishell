@@ -82,6 +82,8 @@ static int	read_heradoc_value(t_cmdlist *cmd_table, char *eof, t_data *data)
 	{
 		close(fd[0]);
 		update_history(data->input); //TODO
+		free(cmd_table->heradoc_values);
+		cmd_table->heradoc_values = NULL;
 		return (0);
 	}
 	set_heradoc_values(cmd_table, fd, data); //Yazılan değerleri okuyup inputa aktar.
