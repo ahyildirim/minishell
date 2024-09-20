@@ -52,7 +52,7 @@ SRC        :=      src/EXPANDER/clearemptylextables.c \
                           src/BUILTIN/export.c \
                           src/BUILTIN/cd.c \
 
-CFLAGS = -Wall -Wextra -Werror -g #-fsanitize=address # MallocStackLogging=1
+CFLAGS = -Wall -Wextra -Werror -g #-fsanitize=address #MallocStackLogging=1
 READLINE = lib/readline/lib/libreadline.a
 
 RM = @rm -rf
