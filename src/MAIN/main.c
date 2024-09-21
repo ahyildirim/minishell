@@ -2,6 +2,19 @@
 
 int	g_sig = 0;
 
+void	update_history(char *cmd)
+{
+	char	*ptr;
+
+	if (!cmd)
+		return ;
+	ptr = cmd;
+	trim_left_spaces(&ptr);
+	if (!*ptr)
+		return ;
+	add_history(cmd);
+}
+
 void	minishell_func(t_data *data)
 {
 	add_history(data->input);
