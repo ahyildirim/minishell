@@ -14,20 +14,22 @@ static int	*create_pipe()
 
 static void	switch_pipe(int **fd)
 {
-	(*fd)[0] = (*fd)[0] ^ (*fd)[2];
-	(*fd)[2] = (*fd)[0] ^ (*fd)[2];
-	(*fd)[0] = (*fd)[0] ^ (*fd)[2];
-	(*fd)[1] = (*fd)[1] ^ (*fd)[3];
-	(*fd)[3] = (*fd)[1] ^ (*fd)[3];
-	(*fd)[1] = (*fd)[1] ^ (*fd)[3];
-	(*fd)[5] = (*fd)[5] ^ (*fd)[3];
-	(*fd)[3] = (*fd)[5] ^ (*fd)[3];
-	(*fd)[5] = (*fd)[5] ^ (*fd)[3];
-	(*fd)[4] = (*fd)[2] ^ (*fd)[4];
-	(*fd)[2] = (*fd)[2] ^ (*fd)[4];
-	(*fd)[4] = (*fd)[2] ^ (*fd)[4];
+	int	temp;
 
+	temp = (*fd)[0];
+	(*fd)[0] = (*fd)[2];
+	(*fd)[2] = temp;
+	temp = (*fd)[1];
+	(*fd)[1] = (*fd)[3];
+	(*fd)[3] = temp;
+	temp = (*fd)[5];
+	(*fd)[5] = (*fd)[3];
+	(*fd)[3] = temp;
+	temp = (*fd)[4];
+	(*fd)[4] = (*fd)[2];
+	(*fd)[2] = temp;
 }
+
 static void	run_multiple(t_data *data, t_cmdlist *cmd_list)
 {
 	int	*fd;
