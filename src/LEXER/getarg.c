@@ -25,6 +25,11 @@ static void	read_arg_value(int *fd, t_data *data)
 	while(1)
 	{
 		str = readline("> "); //readline ile kullanıcıdan argüman bekle.
+		if(str == NULL)
+		{
+			free(str);
+			exit(EXIT_FAILURE);
+		}
 		if(!is_valid_arg(str)) //girilen argüman geçerli mi kontrol et, geçerli ise iterasyona devam et.
 			continue;
 		if (str)
