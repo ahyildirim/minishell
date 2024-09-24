@@ -56,7 +56,8 @@ static void	fill_heradoc(char *eof, int *fd, t_data *data)
 
 	close(fd[0]); //Okuma ucu ile bir işimiz olmadığı için fd[0]'ı kapatıyoruz.
 	lines = get_heradoc_values(eof); //Bu fonksiyon ile heradoc içindeki değerleri alıyoruz
-	write(fd[1], lines, ft_strlen(lines)); //Heradoc içindeki değerleri pipe'ın yazma ucuna yani fd[1]'e yazdır.
+	if (lines)
+		write(fd[1], lines, ft_strlen(lines)); //Heradoc içindeki değerleri pipe'ın yazma ucuna yani fd[1]'e yazdır.
 	close(fd[1]); //BU fonksiyonda fd[1] ile işimiz kalmadığı için kapat.
 	free(lines);
 	free_loop(data);
