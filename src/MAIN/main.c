@@ -8,11 +8,8 @@ void	minishell_func(t_data *data)
 	lexer(data);
 	expander(data);
 	parser(data);
-	//print_lexer(data);
-	//print_parser(data);
 	main_executor(data);
 	free_loop(data);
-	
 }
 
 void shell_loop(t_data *data)
@@ -32,7 +29,6 @@ void shell_loop(t_data *data)
 			minishell_func(data);
 		}
 	}
-	
 }
 
 int main(int ac, char **av, char **env)
@@ -46,13 +42,8 @@ int main(int ac, char **av, char **env)
 	if (!data)
 		return (ft_putstr_fd("Error: Memory allocation error\n", 2), EXIT_FAILURE);
 	init_data(data);
-	init_metachars(data);
 	fill_envs(data, env);
 	shell_loop(data);
 	free_core(data);
 	return (0);
 }
-/* void __attribute__((destructor))destructor(void)
-{
-	system("leaks --quiet minishell");
-} */
