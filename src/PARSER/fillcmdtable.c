@@ -32,8 +32,6 @@ static void	fill_cmdnode(t_cmdlist *cmd_table, t_lexlist **lex_table, t_data *da
 	int		start;
 
 	cmd_table->path = create_path(*lex_table); //Bir lex düğümünden komut yolunu oluşturur ve cmd düğümünün yolunu doldurur.
-	if(cmd_table->path == NULL)
-		return ;
 	tmp_path = cmd_table->path; //Yolu tutmak için geçici bir değişken.
 	start = 0; //Komutun başlangıcı takip edilir.
 	while (*lex_table && (*lex_table)->type != SIGN_PIPE)

@@ -45,7 +45,8 @@ static char	*get_heradoc_values(char *eof)
 		if(new_line) //new_line içini boşalt ki memory leak olmasın, sonraki döngüde temiz bir şekilde readline ile bir daha oku.
 			free(new_line);
 	}
-	str_append_char(&line, '\n'); //En sonda line sonuna bir '\n' daha ekle.
+	if(line)
+		str_append_char(&line, '\n'); //En sonda line sonuna bir '\n' daha ekle.
 	return (line);
 }
 
@@ -69,6 +70,7 @@ static int	read_heradoc_value(t_cmdlist *cmd_table, char *eof, t_data *data)
 	int	fd[2];
 	int	ret;
 
+	g_sig = 2;
 	pipe(fd); //getarg.c dosyasında olduğu gibi parent ve child process arasında iletişim kurmak için yazma ve okuma uçlu bir boru açıyoruz.
 	pid = fork(); //Girilen değerleri almak için bir childp process oluşturuyoruz.
 	data->is_reading = 1; //Okuyor flag'ini 1 yapyıoruz.
@@ -77,11 +79,10 @@ static int	read_heradoc_value(t_cmdlist *cmd_table, char *eof, t_data *data)
 	close(fd[1]); //yazma ile işimiz olmadığı için fd[1]'i kapat.
 	waitpid(pid, &ret, 0); //child process'in işinin bitmesini bekle ve fonksiyondan çıkan sinyali ret'in içine at.
 	data->is_reading = 0; //Okuma flag'ini 0 la;
-	ret = WEXITSTATUS(ret); //Çıkış sinyalinin ne olduğunu tanımla.
+ 	ret = WEXITSTATUS(ret); //Çıkış sinyalinin ne olduğunu tanımla.
 	if(ret == SIGNAL_C) //Signal C yakalandı ise çıkış yap.
 	{
 		close(fd[0]);
-		update_history(data->input); //TODO
 		free(cmd_table->heradoc_values);
 		cmd_table->heradoc_values = NULL;
 		return (0);
@@ -90,7 +91,7 @@ static int	read_heradoc_value(t_cmdlist *cmd_table, char *eof, t_data *data)
 	return (1);
 }
 
-void	start_heradoc(t_cmdlist *cmd_table, t_data *data)
+void	run_heradoc(t_cmdlist *cmd_table, t_data *data)
 {
 	t_filelist	*tmp;
 
@@ -113,4 +114,5 @@ void	start_heradoc(t_cmdlist *cmd_table, t_data *data)
 		}
 		cmd_table = cmd_table->next;
 	}
+	g_sig = 0;
 }
