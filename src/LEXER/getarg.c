@@ -42,6 +42,7 @@ static int	read_arg(int *fd, t_data *data)
 	int	pid;
 	int	ret;
 
+	g_sig = 2;
 	pid = fork(); //fork ile bir child process oluştur.
 	data->is_reading = 1; //Sanırım ileride gerekli olacak bir kontrol?
 	if(pid == 0) //Child process içinde girilen argümanı yazmak için bir fonksiyon kullan.
@@ -72,6 +73,7 @@ char	*get_arg(t_data *data)
 	str = NULL;
 	while(read(fd[0], buf, 1)) //argümanı oku, buffera at ve buffera her attığın karakteri str'ın sonuna ekle
 		str_append_char(&str, *buf);
+	g_sig = 0;
 	close(fd[0]);
 	return (str);
 }
