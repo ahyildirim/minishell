@@ -1,11 +1,5 @@
 #include "../../includes/minishell.h"
 
-static void	handle_sigint(int sig)
-{
-	(void)sig;
-	exit(SIGNAL_C);
-}
-
 static int	is_valid_arg(char *str)
 {
 	char	*tmp;

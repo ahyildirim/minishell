@@ -57,6 +57,7 @@ static void	run_multiple(t_data *data, t_cmdlist *cmd_list)
 
 static void run_single(t_data *data, t_cmdlist *cmd, int *fd)
 {
+	g_sig = 3;
 	if (cmd->input_file != SSTDERR && cmd->output_file != SSTDERR)
 		exec_command(data, cmd, fd, -1);
 }

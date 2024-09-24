@@ -8,15 +8,13 @@ char	*ft_strlcpy(char *dst, char *src, int len)
 
 	if(!src || !len)
 		return (NULL);
-	if(!dst)
-		return (NULL);
-	str = (char *)malloc(ft_strlen(dst) + (len + 1));
+	str = (char *)malloc(sizeof(char) * (ft_strlen(dst) + (len + 1)));
 	ret_str = str;
 	i = -1;
 	while(dst && *dst)
-		*(str)++ = *(dst)++;
+		*(str++) = *(dst++);
 	while(++i < len && src && *src)
-		*(str)++ = *(src)++;
-	*str = '\0';
+		*(str++) = *(src++);
+	*str = 0;
 	return (ret_str);
 }

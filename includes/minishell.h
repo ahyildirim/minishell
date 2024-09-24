@@ -90,5 +90,6 @@ t_lexlist	*add_lex_node(t_lexlist **node);
 void	print_lexer(t_data *data);
 void	print_parser(t_data *data);
 void	print_cmd(t_data *data);
+void	handle_sigint(int sig);
 
 #endif

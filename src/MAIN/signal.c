@@ -5,14 +5,11 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-/* void	ctrl_d(int sig)
+void	handle_sigint(int sig)
 {
-	(void)sig;// 'sig' parametresi kullanılmıyor, bu yüzden görmezden geliniyor
-	rl_on_new_line();// Yeni bir satır başlatır ve imleci satırın başına taşır
-	printf("\033[K");// Terminaldeki mevcut satırı temizler (ANSI escape code ile)
-	rl_redisplay();// Readline ile satırı yeniden görüntüler
-	g_sig = 0;// Global 'g_sig' değişkenini 0 yapar, bu bir durum bayrağı olabilir
-} */
+	(void)sig;
+	exit(SIGNAL_C);
+}
 
 void	ctrl_c(int sig)
 {
@@ -21,8 +18,14 @@ void	ctrl_c(int sig)
 	{
 		/* write(1, "\033[A", 3);// Terminalde bir satır yukarı çıkmak için escape kodu gönderilir
 		ioctl(0, TIOCSTI, "\n"); // Terminale yeni bir satır eklemek için 'ioctl' kullanılır */
-		printf("\n");
+		write(1, "\n", 1);
 		//exit(SIGNAL_C);
+	}
+	else if(g_sig == 3)// 'g_sig' 2 değilse, normal Ctrl+C davranışı uygulanır
+	{
+		write(1, "\n", 1);// Terminalde yeni bir satır oluşturur
+		rl_on_new_line();// Yeni bir satır başlatır ve imleci satırın başına taşır
+		rl_replace_line("", 0);// Mevcut satırı boş bir satır ile değiştirir
 	}
 	else// 'g_sig' 2 değilse, normal Ctrl+C davranışı uygulanır
 	{

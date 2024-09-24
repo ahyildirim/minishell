@@ -1,11 +1,5 @@
 #include "../../includes/minishell.h"
 
-static void	handle_sigint(int sig)
-{
-	(void)sig;
-	exit(SIGNAL_C);
-}
-
 static void	set_heradoc_values(t_cmdlist *cmd_table, int *fd, t_data *data)
 {
 	char	buf[1];
@@ -34,7 +28,7 @@ static char	*get_heradoc_values(char *eof)
 	while(1)
 	{
 		new_line = readline("> "); //readline ile bir sonraki değer'i al
-		if(ft_strcmp(eof, new_line)) //eğer eof stringi geldiyse yani "CAT << EOF"'daki EOF stringi geldi ise free'leyip döngüden çık.
+		if(ft_strcmp(eof, new_line) || new_line == NULL) //eğer eof stringi geldiyse yani "CAT << EOF"'daki EOF stringi geldi ise free'leyip döngüden çık.
 		{
 			free(new_line);
 			break;
