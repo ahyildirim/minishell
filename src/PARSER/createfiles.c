@@ -95,7 +95,8 @@ void	create_files(t_cmdlist	*cmd_table, t_data *data)
 
 	if(!cmd_table)
 		return ;
-	start_heradoc(cmd_table, data); //Her şeyden önce ilk olarak heradoc bakıyoruz, bunun için heradoc fonksiyonunu başlatıyoruz.
+	
+	run_heradoc(cmd_table, data); //Her şeyden önce ilk olarak heradoc bakıyoruz, bunun için heradoc fonksiyonunu başlatıyoruz.
 	if(data->output || !cmd_table) //Eğer cmd table dolmadıysa returnla.
 		return ;
 	while(cmd_table) //Yine tüm komut tablosu üstünde gez, dosya oluşturulacak mı bak.

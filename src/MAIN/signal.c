@@ -5,22 +5,24 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-void	ctrl_d(int sig)
+/* void	ctrl_d(int sig)
 {
 	(void)sig;// 'sig' parametresi kullanılmıyor, bu yüzden görmezden geliniyor
 	rl_on_new_line();// Yeni bir satır başlatır ve imleci satırın başına taşır
 	printf("\033[K");// Terminaldeki mevcut satırı temizler (ANSI escape code ile)
 	rl_redisplay();// Readline ile satırı yeniden görüntüler
 	g_sig = 0;// Global 'g_sig' değişkenini 0 yapar, bu bir durum bayrağı olabilir
-}
+} */
 
 void	ctrl_c(int sig)
 {
 	(void)sig;// 'sig' parametresi kullanılmıyor, bu yüzden görmezden geliniyor
 	if (g_sig == 2)// Eğer 'g_sig' 2 ise, özel bir davranış tetiklenir
 	{
-		write(1, "\033[A", 3);// Terminalde bir satır yukarı çıkmak için escape kodu gönderilir
-		ioctl(0, TIOCSTI, "\n");// Terminale yeni bir satır eklemek için 'ioctl' kullanılır
+		/* write(1, "\033[A", 3);// Terminalde bir satır yukarı çıkmak için escape kodu gönderilir
+		ioctl(0, TIOCSTI, "\n"); // Terminale yeni bir satır eklemek için 'ioctl' kullanılır */
+		printf("\n");
+		//exit(SIGNAL_C);
 	}
 	else// 'g_sig' 2 değilse, normal Ctrl+C davranışı uygulanır
 	{
@@ -53,5 +55,5 @@ void	handle_signal(void)
 {
 	tcseta();// Terminal ayarlarını yapılandırmak için 'tcseta' fonksiyonunu çağırır
 	signal(SIGINT, ctrl_c);// SIGINT (Ctrl+C) sinyali alındığında 'ctrl_c' işlevini çalıştırır
-	signal(SIGQUIT, ctrl_d);// SIGQUIT (Ctrl+D) sinyali alındığında 'ctrl_d' işlevini çalıştırır
+	signal(SIGQUIT, SIG_IGN);// SIGQUIT (Ctrl+D) sinyali alındığında 'ctrl_d' işlevini çalıştırır
 }
