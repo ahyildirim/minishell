@@ -33,7 +33,8 @@ static void	read_arg_value(int *fd, t_data *data)
 		str = readline("> "); //readline ile kullanıcıdan argüman bekle.
 		if(!is_valid_arg(str)) //girilen argüman geçerli mi kontrol et, geçerli ise iterasyona devam et.
 			continue;
-		write(fd[1], str, ft_strlen(str)); //girilen argümanı write ile fd[1]'e yazdır.
+		if (str)
+			write(fd[1], str, ft_strlen(str)); //girilen argümanı write ile fd[1]'e yazdır.
 		close(fd[1]);
 		free(str);
 		free_loop(data);
