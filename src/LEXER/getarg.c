@@ -28,6 +28,7 @@ static void	read_arg_value(int *fd, t_data *data)
 		if(str == NULL)
 		{
 			free(str);
+			write(2, "-bash: syntax error unexpected end of file\n", 43);
 			exit(EXIT_FAILURE);
 		}
 		if(!is_valid_arg(str)) //girilen argüman geçerli mi kontrol et, geçerli ise iterasyona devam et.
