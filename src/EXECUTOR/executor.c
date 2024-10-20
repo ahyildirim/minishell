@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   executor.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ahyildir <ahyildir@student.42istanbul.c    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/05 19:27:20 by euc               #+#    #+#             */
+/*   Updated: 2024/10/20 16:19:06 by ahyildir         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
-static int	*create_pipe()
+static int	*create_pipe(void)
 {
 	int	i;
 	int	*fd;
@@ -34,6 +46,7 @@ static void	run_multiple(t_data *data, t_cmdlist *cmd_list)
 {
 	int	*fd;
 
+	g_sig = 2;
 	fd = create_pipe();
 	while (cmd_list)
 	{
@@ -55,19 +68,19 @@ static void	run_multiple(t_data *data, t_cmdlist *cmd_list)
 	wait_all(data);
 }
 
-static void run_single(t_data *data, t_cmdlist *cmd, int *fd)
+static void	run_single(t_data *data, t_cmdlist *cmd, int *fd)
 {
 	g_sig = 3;
 	if (cmd->input_file != SSTDERR && cmd->output_file != SSTDERR)
 		exec_command(data, cmd, fd, -1);
 }
 
-void main_executor(t_data *data)
+void	main_executor(t_data *data)
 {
 	if (!data->cmd_table)
 		return ;
 	else if (!data->cmd_table->next)
-		run_single(data, data->cmd_table, NULL);//TODO builtin
+		run_single(data, data->cmd_table, NULL);
 	else
-		run_multiple(data, data->cmd_table);//TODO
+		run_multiple(data, data->cmd_table);
 }

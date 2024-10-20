@@ -9,11 +9,11 @@ SRC        :=      src/EXPANDER/clearemptylextables.c \
                           src/LEXER/getarg.c \
                           src/LEXER/lexer.c \
                           src/LEXER/setlextypes.c \
-						  src/LEXER/printlexer.c \
 						  src/LEXER/lexerfree.c \
                           src/LIBFT/ft_itoa.c \
                           src/LIBFT/ft_memcpy.c \
                           src/LIBFT/ft_strcmp.c \
+                          src/LIBFT/ft_strncmp.c \
                           src/LIBFT/ft_strdup.c \
                           src/LIBFT/ft_strjoin.c \
                           src/LIBFT/ft_strlcpy.c \
@@ -25,7 +25,6 @@ SRC        :=      src/EXPANDER/clearemptylextables.c \
                           src/MAIN/main.c \
                           src/MAIN/signal.c \
                           src/PARSER/createfilelist.c \
-                          src/PARSER/printparser.c \
                           src/PARSER/fillcmdtable.c \
                           src/PARSER/createfiles.c \
                           src/PARSER/heradoc.c \
@@ -44,6 +43,7 @@ SRC        :=      src/EXPANDER/clearemptylextables.c \
                           src/EXECUTOR/dup.c \
                           src/EXECUTOR/process.c \
                           src/EXECUTOR/builtin_funcs.c \
+                          src/EXECUTOR/exec_utils.c \
                           src/BUILTIN/env.c \
                           src/BUILTIN/pwd.c \
                           src/BUILTIN/echo.c \

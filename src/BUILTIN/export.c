@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ahyildir <ahyildir@student.42istanbul.c    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/05 19:26:58 by euc               #+#    #+#             */
+/*   Updated: 2024/10/19 14:02:00 by ahyildir         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 static int	change_env(char *envname, t_data *data, char *arg, int is_equal)
@@ -41,6 +53,7 @@ static void	double_export_arg(char *env_cmd, t_data *data)
 	add_new_envnode(&env, env_cmd);
 	if (!is_equal)
 		update_env(data, env_cmd, NULL);
+	data->last_output = 0;
 	free(temp_envname);
 }
 
@@ -64,6 +77,7 @@ static void	single_export_arg(t_cmdlist *cmd, t_data *data)
 		write(cmd->output_file, "\"\n", 2);
 		env = env->next;
 	}
+	data->last_output = 0;
 }
 
 void	com_export(t_cmdlist *cmd_node, t_data *data)

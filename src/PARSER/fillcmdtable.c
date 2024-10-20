@@ -1,55 +1,67 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   fillcmdtable.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ahyildir <ahyildir@student.42istanbul.c    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/05 19:25:40 by ahyildir          #+#    #+#             */
+/*   Updated: 2024/10/05 19:25:41 by ahyildir         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
-static char **create_path(t_lexlist *lex_table)
+static char	**create_path(t_lexlist *lex_table)
 {
-	char	**path; //Yolu tutacak bir değişken
-	int		text_count; //Kaç adet text türünde düğüm var onu sayar.
-	
+	char	**path;
+	int		text_count;
+
 	text_count = 0;
-	while(lex_table && lex_table->type != SIGN_PIPE)
+	while (lex_table && lex_table->type != SIGN_PIPE)
 	{
-		if(lex_table->type == TEXT && lex_table->content) //Eğer text türündeyse ve içeriği boş değil ise count'ı bir arttırır.
+		if (lex_table->type == TEXT && lex_table->content)
 			text_count++;
-		else //Text türünde değil ise
+		else
 		{
-			lex_table = lex_table->next; //Şuan var olduğu elemanı geçer.
-			if (lex_table) //Eğer text türünde değil ise zaten bir metakarater türündedir, bu yüzden ondan sonra gelen herhangi bir elemanı işleme almamak için bir kere daha ilerletiriz.
+			lex_table = lex_table->next;
+			if (lex_table)
 				lex_table = lex_table->next;
-			continue;
+			continue ;
 		}
 		lex_table = lex_table->next;
 	}
-	if(!text_count) //Eğer text türünde hiç düğüm yok ise NULL döndür.
+	if (!text_count)
 		return (NULL);
-	path = (char **)malloc(sizeof(char *) * (text_count + 1)); //Kaç tane text türünde düğüm var ise o kadar yer aç, sonuna NULL ata ve döndür.
+	path = (char **)malloc(sizeof(char *) * (text_count + 1));
 	path[text_count] = NULL;
 	return (path);
 }
 
-static void	fill_cmdnode(t_cmdlist *cmd_table, t_lexlist **lex_table, t_data *data)
+static void	fill_cmdnode(t_cmdlist *cmd_table, t_lexlist **lex_table,
+		t_data *data)
 {
 	char	**tmp_path;
 	int		start;
 
-	cmd_table->path = create_path(*lex_table); //Bir lex düğümünden komut yolunu oluşturur ve cmd düğümünün yolunu doldurur.
-	tmp_path = cmd_table->path; //Yolu tutmak için geçici bir değişken.
-	start = 0; //Komutun başlangıcı takip edilir.
+	cmd_table->path = create_path(*lex_table);
+	tmp_path = cmd_table->path;
+	start = 0;
 	while (*lex_table && (*lex_table)->type != SIGN_PIPE)
 	{
-		if(create_filelist(cmd_table, lex_table, data)) //Eğer gelen düğüm ile dosya oluşturulabiliyor ise oluşturur ve bir sonraki iterasyona geçer.
-			continue;
-		if(start == 0 && (*lex_table)->type != SIGN_PIPE) //Eğer komutun başındaysak komut yolunu bulmak için fonksiyon çağırılır ve lex
-		//Örneğin "ls -l file.txt > output.txt" komutunda start 0 olduğu için ls komut yolunu bulmak için fonksiyon çağırılır fakat -l bir komut yoluna ihtiyaç duymadığı için start arttırılır ve bu fonksiyon bir daha çalışmaz. 
+		if (create_filelist(cmd_table, lex_table, data))
+			continue ;
+		if (start == 0 && (*lex_table)->type != SIGN_PIPE)
 		{
 			cmd_expander(&((*lex_table)->content), data);
 			start++;
 		}
-		if((*lex_table)->content) //İlk komuttan sonra gelecek olan flagleri tutmak için önce içeriği var mı diye kontrol edilir, eğer var ise path'ın içine atıyoruz.
-			*(tmp_path++) = (*lex_table)->content; //Yukarıda verdiğim örnekte ls genişletildikten sonra kalan "-l" ve "file.txt" argümanları path'ın içine atılır.
+		if ((*lex_table)->content)
+			*(tmp_path++) = (*lex_table)->content;
 		*lex_table = (*lex_table)->next;
 	}
-	if(cmd_table->path) //Eğer önceki örnekteki gibi argümanlar var ise commandi path'ın ilk elemanı olduğunu belirtmemiz gerekir.
-		cmd_table->command = cmd_table->path[0]; //path[0] = "bin/ls", path[1] = "-l", path[2] = "file.txt"
+	if (cmd_table->path)
+		cmd_table->command = cmd_table->path[0];
 }
 
 void	fill_cmdtable(t_data *data)
@@ -57,14 +69,14 @@ void	fill_cmdtable(t_data *data)
 	t_cmdlist	*tmp_cmdtable;
 	t_lexlist	*tmp_lextable;
 
-	if(!data->cmd_table)
+	if (!data->cmd_table)
 		return ;
 	tmp_cmdtable = data->cmd_table;
 	tmp_lextable = data->lex_table;
-	while(tmp_cmdtable)
+	while (tmp_cmdtable)
 	{
-		fill_cmdnode(tmp_cmdtable, &tmp_lextable, data); //Her iterasyonda bir komut düğümünü doldurmak için bu fonksiyonu kullanıyoruz.
-		if(tmp_lextable && *tmp_lextable->content == *PIPE) //Eğer gelen düğüm PIPE ise bir sonraki düğüme geç.
+		fill_cmdnode(tmp_cmdtable, &tmp_lextable, data);
+		if (tmp_lextable && *tmp_lextable->content == *PIPE)
 			tmp_lextable = tmp_lextable->next;
 		tmp_cmdtable = tmp_cmdtable->next;
 	}

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   dollarexpander.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ahyildir <ahyildir@student.42istanbul.c    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/05 19:24:44 by ahyildir          #+#    #+#             */
+/*   Updated: 2024/10/17 17:04:32 by ahyildir         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 static void	handle_dollar_value(char **dst, char **src, t_data *data)
@@ -6,14 +18,15 @@ static void	handle_dollar_value(char **dst, char **src, t_data *data)
 	char	*str;
 
 	len = 0;
-	str = (*src) + 1; //İşaretçiyi dolardan bir sonraki karaktere taşı.
-	while(*str != ' ' && *str && *str != *SINGLE_QUOTE && *str != *DOUBLE_QUOTE && *str != '$') //Metin bitene kadar boyutunu ölç.
+	str = (*src) + 1;
+	while (*str != ' ' && *str && *str != *SINGLE_QUOTE && *str != *DOUBLE_QUOTE
+		&& *str != '$')
 	{
 		len++;
 		str++;
 	}
-	str = ft_strlcpy(NULL, (*src) + 1, len); //Üstte boyutunu ölçtüğümüz text'i str'a kopyala.
-	env_expander(dst, str, data); //Aldığımız variable ismini environment table'ın içine doldur.
+	str = ft_strlcpy(NULL, (*src) + 1, len);
+	env_expander(dst, str, data);
 	free(str);
 	*src += len;
 }
@@ -29,14 +42,14 @@ static void	handle_question_mark(char **dst, char **src, t_data *data)
 
 	ret = ft_itoa(data->last_output);
 	ft_strjoin(dst, ret);
-	free(ret);	
+	free(ret);
 	(*src)++;
 }
 
 static void	handle_double_dollar(char **dst, char **src, t_data *data)
 {
 	char	*ret;
-	
+
 	ret = ft_itoa(data->main_pid);
 	ft_strjoin(dst, ret);
 	free(ret);
@@ -47,13 +60,14 @@ void	dollar_expander(char **dst, char **src, t_data *data)
 {
 	char	*str;
 
-	str = (*src) + 1; //İşaretçimizi dolar işaretinden hemen sonraki karaktere ayarlıyoruz ki ne olduğuna bakalım.
-	if(*str == *DOLLAR)
-		handle_double_dollar(dst, src, data); //Eğer yine dolar var ise bu komut bizim shellimizin process id'sini yazar. (Shell'i açıp $$ yaz ve çıktıyı gör).
-	else if(*str == *QUSTION_MARK)
-		handle_question_mark(dst, src, data); //Eğer soru işareti var ise bu komut shell ile son çalıştırılan programın return değerini döndürür. (Shell'de return 10 verdiğin bir main yaz ve çalıştır sonra $? komutunu gir, 10 çıktısını alıcaksın.)
-	else if(*str == ' ' || *str == '\0' || *str == *DOUBLE_QUOTE || *str == *SINGLE_QUOTE)
-		handle_single_dollar(dst); //Eğer sadece tek bir dolar var ise sadece genişleticeğimiz texte $ işaretini ekle.
+	str = (*src) + 1;
+	if (*str == *DOLLAR)
+		handle_double_dollar(dst, src, data);
+	else if (*str == *QUSTION_MARK)
+		handle_question_mark(dst, src, data);
+	else if (*str == ' ' || *str == '\0' || *str == *DOUBLE_QUOTE
+		|| *str == *SINGLE_QUOTE)
+		handle_single_dollar(dst);
 	else
-		handle_dollar_value(dst, src, data); //Eğer text var ise bu bir variable ismidir ve o isimi işlememiz gerekir.
+		handle_dollar_value(dst, src, data);
 }

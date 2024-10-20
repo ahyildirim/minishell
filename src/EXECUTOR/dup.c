@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   dup.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: euc <euc@student.42istanbul.com.tr>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/05 19:27:15 by euc               #+#    #+#             */
+/*   Updated: 2024/10/05 19:27:16 by euc              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 void	clear_pipe(int *fd)
 {
-	int i;
+	int	i;
 
 	if (fd)
 	{
@@ -24,7 +36,8 @@ void	create_dup(t_cmdlist *cmd, t_data *data, int *fd, int fd_index)
 	{
 		pipe(new_fd);
 		if (cmd->heradoc_values)
-			write(new_fd[1], cmd->heradoc_values, ft_strlen(cmd->heradoc_values));
+			write(new_fd[1], cmd->heradoc_values,
+				ft_strlen(cmd->heradoc_values));
 		dup2(new_fd[0], STDIN_FILENO);
 		close(new_fd[1]);
 		close(new_fd[0]);
@@ -32,10 +45,10 @@ void	create_dup(t_cmdlist *cmd, t_data *data, int *fd, int fd_index)
 	else if (cmd->input_file > SSTDERR)
 		dup2(cmd->input_file, STDIN_FILENO);
 	else if (fd && cmd != data->cmd_table)
-		dup2(fd[fd_index -2], STDIN_FILENO);
+		dup2(fd[fd_index - 2], STDIN_FILENO);
 	if (cmd->output_file > SSTDERR)
 		dup2(cmd->output_file, STDOUT_FILENO);
-	else if (fd && cmd ->next)
+	else if (fd && cmd->next)
 		dup2(fd[fd_index + 1], STDOUT_FILENO);
 	if (fd_index >= 0)
 		clear_pipe(fd);

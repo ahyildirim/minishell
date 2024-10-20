@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   unset.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ahyildir <ahyildir@student.42istanbul.c    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/05 19:27:03 by euc               #+#    #+#             */
+/*   Updated: 2024/10/19 13:55:01 by ahyildir         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 void	delete_env(char *name, t_data *data)
@@ -18,11 +30,12 @@ void	delete_env(char *name, t_data *data)
 			else
 				tmp_env->next = env->next;
 			free(env);
-			break;
+			break ;
 		}
 		tmp_env = env;
 		env = env->next;
-	}	
+	}
+	data->last_output = 0;
 }
 
 void	com_unset(t_cmdlist *cmd, t_data *data)
@@ -38,16 +51,13 @@ void	com_unset(t_cmdlist *cmd, t_data *data)
 		{
 			if (!env_arg_control(*tmp_name, data))
 			{
-				print_error("-bash: unset: `", *tmp_name, 
-						"': not a valid identifier\n");
+				print_error("-bash: unset: `", *tmp_name,
+					"': not a valid identifier\n");
 				data->last_output = 1;
-				continue;
+				continue ;
 			}
 			else
 				delete_env(*tmp_name, data);
-			
 		}
-		
 	}
-	
 }

@@ -1,17 +1,32 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtin_env_funcs.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ahyildir <ahyildir@student.42istanbul.c    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/05 19:27:07 by euc               #+#    #+#             */
+/*   Updated: 2024/10/20 15:13:46 by ahyildir         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 static char	*valid_env(char *env, t_data *data)
 {
-	int	flag;
-
-	flag = 0;
-	if ((*env >= 'a' && *env <= 'z') || (*env >= 'A' && *env <= 'Z'))
-		flag = 1;
-	while (*env != ' ' && *env && *env != '=')
+	if (!*env)
+		return (NULL);
+	if (!((*env >= 'A' && *env <= 'Z') || (*env >= 'a' && *env <= 'z')
+			|| *env == '_'))
+		return (NULL);
+	env++;
+	while (*env && *env != ' ' && *env != '=')
 	{
-		if ((*env > '0' && *env < '9' && !flag)
-				|| is_meta_char(env, data))
-				return (NULL);
+		if (!(((*env >= 'A' && *env <= 'Z') || (*env >= 'a' && *env <= 'z')
+					|| (*env >= '0' && *env <= '9') || *env == '_')))
+			return (NULL);
+		if (is_meta_char(env, data))
+			return (NULL);
 		env++;
 	}
 	return (env);
@@ -37,7 +52,7 @@ int	env_arg_control(char *env, t_data *data)
 {
 	if (env_name_control(env, data))
 		return (1);
-	print_error("-bash: export: `", env, "': not a valid identifier");
+	print_error("-bash: export: `", env, "': not a valid identifier\n");
 	data->last_output = 1;
 	return (0);
 }

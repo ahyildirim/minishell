@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exit.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ahyildir <ahyildir@student.42istanbul.c    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/05 19:26:55 by euc               #+#    #+#             */
+/*   Updated: 2024/10/17 16:07:48 by ahyildir         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 int	get_array_len(char **ar)
@@ -14,12 +26,11 @@ static int	is_all_num(char *text)
 {
 	while (text && *text)
 	{
-		if (!(*text >= '0' && *text <= '9'))
+		if (!(*text >= '0' && *text <= '9') && !(*text == '-' || *text == '+'))
 			return (0);
 		text++;
 	}
 	return (1);
-	
 }
 
 void	com_exit(t_cmdlist *cmd, t_data *data)
@@ -40,7 +51,7 @@ void	com_exit(t_cmdlist *cmd, t_data *data)
 		else
 		{
 			print_error("bash: exit ",
-					cmd->path[1], ": numeric argument required\n");
+				cmd->path[1], ": numeric argument required\n");
 			data->last_output = 255;
 		}
 	}

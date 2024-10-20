@@ -1,12 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexerfree.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ahyildir <ahyildir@student.42istanbul.c    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/05 19:25:01 by ahyildir          #+#    #+#             */
+/*   Updated: 2024/10/05 19:25:02 by ahyildir         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
-static int	skip_heradoc(t_lexlist **lex_table, t_lexlist **tmp, t_lexlist *stop, int *flag)
+static int	skip_heradoc(t_lexlist **lex_table, t_lexlist **tmp,
+		t_lexlist *stop, int *flag)
 {
-	if(stop == *lex_table)
+	if (stop == *lex_table)
 		*flag |= 1;
-	if((*lex_table)->type == SIGN_DOUBLE_LESS && !*flag)
+	if ((*lex_table)->type == SIGN_DOUBLE_LESS && !*flag)
 	{
-		if(*lex_table && *lex_table != stop)
+		if (*lex_table && *lex_table != stop)
 			*lex_table = (*lex_table)->next;
 		*tmp = *lex_table;
 		*lex_table = (*lex_table)->next;
@@ -23,11 +36,11 @@ void	lexer_free_no_heradoc(t_lexlist *stop, t_data *data)
 
 	lexer = data->lex_table;
 	flag = 0;
-	while(lexer)
+	while (lexer)
 	{
-		if(skip_heradoc(&lexer, &tmp, stop, &flag))
-			continue;
-		if(data->lex_table == lexer)
+		if (skip_heradoc(&lexer, &tmp, stop, &flag))
+			continue ;
+		if (data->lex_table == lexer)
 		{
 			data->lex_table = data->lex_table->next;
 			tmp = data->lex_table;
@@ -36,7 +49,7 @@ void	lexer_free_no_heradoc(t_lexlist *stop, t_data *data)
 			tmp = tmp->next;
 		free(lexer->content);
 		free(lexer);
-		if(data->lex_table == tmp)
+		if (data->lex_table == tmp)
 			lexer = tmp;
 		else
 			lexer = tmp->next;

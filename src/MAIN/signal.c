@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signal.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ahyildir <ahyildir@student.42istanbul.c    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/05 19:27:51 by euc               #+#    #+#             */
+/*   Updated: 2024/10/20 16:19:36 by ahyildir         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
+#include <readline/history.h>
+#include <readline/readline.h>
+#include <sys/ioctl.h>
 #include <termios.h>
 #include <unistd.h>
-#include <sys/ioctl.h>
-#include <readline/readline.h>
-#include <readline/history.h>
 
 void	handle_sigint(int sig)
 {
@@ -13,50 +25,27 @@ void	handle_sigint(int sig)
 
 void	ctrl_c(int sig)
 {
-	(void)sig;// 'sig' parametresi kullanılmıyor, bu yüzden görmezden geliniyor
-	if (g_sig == 2)// Eğer 'g_sig' 2 ise, özel bir davranış tetiklenir
-	{
-		/* write(1, "\033[A", 3);// Terminalde bir satır yukarı çıkmak için escape kodu gönderilir
-		ioctl(0, TIOCSTI, "\n"); // Terminale yeni bir satır eklemek için 'ioctl' kullanılır */
+	(void)sig;
+	if (g_sig == 2)
 		write(1, "\n", 1);
-		//exit(SIGNAL_C);
-	}
-	else if(g_sig == 3)// 'g_sig' 2 değilse, normal Ctrl+C davranışı uygulanır
+	else if (g_sig == 3)
 	{
-		write(1, "\n", 1);// Terminalde yeni bir satır oluşturur
-		rl_on_new_line();// Yeni bir satır başlatır ve imleci satırın başına taşır
-		rl_replace_line("", 0);// Mevcut satırı boş bir satır ile değiştirir
+		write(1, "\n", 1);
+		rl_on_new_line();
+		rl_replace_line("", 0);
 	}
-	else// 'g_sig' 2 değilse, normal Ctrl+C davranışı uygulanır
-	{
-		write(1, "\n", 1);// Terminalde yeni bir satır oluşturur
-		rl_on_new_line();// Yeni bir satır başlatır ve imleci satırın başına taşır
-		rl_replace_line("", 0);// Mevcut satırı boş bir satır ile değiştirir
-		rl_redisplay();// Terminali yeniden görüntüler
-	}
-	g_sig = 1;// 'g_sig' değişkenini 1 yapar, bu sonraki sinyallerde farklı davranışı tetikleyebilir
-}
-
-void	tcseta(void)// Terminal ayarlarını değiştiren fonksiyon
-{
-	struct termios term1;// 'termios' yapılandırma yapısını tanımlar
-
-	if (tcgetattr(STDIN_FILENO, &term1) != 0)// Terminalin mevcut ayarlarını 'term1' yapısına yükler
-		exit((perror("error"), -1));// Eğer başarısız olursa, hata mesajı basar ve programı sonlandırır
 	else
 	{
-		term1.c_cc[VQUIT] = _POSIX_VDISABLE;// VQUIT sinyalini devre dışı bırakır (Ctrl+\ etkisiz hale gelir)
-		term1.c_lflag |= ECHOE | ICANON;// ECHOE ve ICANON bayraklarını etkinleştirir
-		if (tcsetattr(STDIN_FILENO, TCSANOW, &term1) != 0)// Terminal ayarlarını hemen uygular
-			exit((perror("error"), -1));// Eğer başarısız olursa, hata mesajı basar ve programı sonlandırır
-		if (tcgetattr(STDIN_FILENO, &term1) != 0)// Yeni ayarları kontrol etmek için terminalin ayarlarını tekrar okur
-			exit((perror("error"), -1));// Eğer başarısız olursa, hata mesajı basar ve programı sonlandırır
+		write(1, "\n", 1);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
 	}
+	g_sig = 1;
 }
 
 void	handle_signal(void)
 {
-	tcseta();// Terminal ayarlarını yapılandırmak için 'tcseta' fonksiyonunu çağırır
-	signal(SIGINT, ctrl_c);// SIGINT (Ctrl+C) sinyali alındığında 'ctrl_c' işlevini çalıştırır
-	signal(SIGQUIT, SIG_IGN);// SIGQUIT (Ctrl+D) sinyali alındığında 'ctrl_d' işlevini çalıştırır
+	signal(SIGINT, ctrl_c);
+	signal(SIGQUIT, SIG_IGN);
 }

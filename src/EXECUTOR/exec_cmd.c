@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_cmd.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ahyildir <ahyildir@student.42istanbul.c    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/05 19:27:18 by euc               #+#    #+#             */
+/*   Updated: 2024/10/20 15:21:15 by ahyildir         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 static int	get_env_len(t_data *data)
@@ -38,10 +50,8 @@ static char	**get_env_cpy(t_data *data)
 			envlist[--env_len] = temp_env;
 		}
 		temp_envlist = temp_envlist->next;
-		
 	}
 	return (envlist);
-	
 }
 
 static void	run_execve(t_data *data, t_cmdlist *cmd, int *fd, int fd_index)
@@ -53,8 +63,10 @@ static void	run_execve(t_data *data, t_cmdlist *cmd, int *fd, int fd_index)
 	{
 		create_dup(cmd, data, fd, fd_index);
 		envlist = get_env_cpy(data);
-		if (execve(cmd->command, cmd->path, envlist) == -1)	
+		if (execve(cmd->command, cmd->path, envlist) == -1)
 		{
+			if (!type_control(data, cmd, envlist))
+				exit(1);
 			if (cmd->command)
 				print_error(cmd->command, " command not found\n", NULL);
 			free_env_cpy(envlist);
@@ -67,7 +79,6 @@ static void	run_execve(t_data *data, t_cmdlist *cmd, int *fd, int fd_index)
 		clear_pipe(fd);
 	waitpid(cmd->pid, &data->last_output, 0);
 	data->last_output = WEXITSTATUS(data->last_output);
-	
 }
 
 char	*get_cmd(char *cmd)
@@ -85,7 +96,7 @@ char	*get_cmd(char *cmd)
 	return (cmd - cmd_len);
 }
 
-void exec_command(t_data *data, t_cmdlist *cmd_l, int *fd, int fd_index)
+void	exec_command(t_data *data, t_cmdlist *cmd_l, int *fd, int fd_index)
 {
 	char	*cmd;
 	int		builtin_index;
@@ -95,7 +106,7 @@ void exec_command(t_data *data, t_cmdlist *cmd_l, int *fd, int fd_index)
 	cmd = get_cmd(cmd_l->command);
 	builtin_index = is_builtin(cmd);
 	if (builtin_index)
-		run_builtin(data, cmd_l, builtin_index, fd, fd_index);
+		run_builtin(data, cmd_l, builtin_index, fd);
 	else
 		run_execve(data, cmd_l, fd, fd_index);
 }

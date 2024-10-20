@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: euc <euc@student.42istanbul.com.tr>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/05 19:27:45 by euc               #+#    #+#             */
+/*   Updated: 2024/10/05 19:27:46 by euc              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 void	init_metachars(t_data *data)
@@ -14,17 +26,15 @@ void	init_metachars(t_data *data)
 	*(meta_chars++) = NULL;
 }
 
-void init_data(t_data *data)
+void	init_data(t_data *data)
 {
-	// Verilen tüm değerleri başlangıç değerlerine ayarlıyoruz.
 	data->input = NULL;
-	// malloc ile bellekte alan açıyoruz ve metachars başlangıç değerini atıyoruz (NULL).
-	data->is_reading = 0;    // Okuma durumu başlangıçta false (0).
-	data->last_output = 0;   // Başlangıçta son çıktı değeri yok.
-	data->output = 0;        // Başlangıçta herhangi bir çıktı yok.
-	data->main_pid = 0;      // Ana PID başlangıçta 0.
-	data->heradoc_fd = -1;   // Heredoc file descriptor başlangıçta -1.
-	data->cnt_pipe = 0;      // Pipe sayısı başlangıçta 0.
+	data->is_reading = 0;
+	data->last_output = 0;
+	data->output = 0;
+	data->main_pid = 0;
+	data->heradoc_fd = -1;
+	data->cnt_pipe = 0;
 	data->env_table = NULL;
 	data->cmd_table = NULL;
 	data->lex_table = NULL;

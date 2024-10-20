@@ -1,6 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ahyildir <ahyildir@student.42istanbul.c    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/05 19:26:46 by euc               #+#    #+#             */
+/*   Updated: 2024/10/20 15:43:54 by ahyildir         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
-static int	update_pwd_from_export(t_data *data, char *pwd_name, char *pwd_content)
+static int	update_pwd_from_export(t_data *data, char *pwd_name,
+		char *pwd_content)
 {
 	t_env	*temp_env;
 	char	*temp_pwd;
@@ -44,7 +57,7 @@ static int	change_dir(t_data *data, char *path)
 	return (1);
 }
 
-static void	cd_double_arg(t_data *data, t_cmdlist *cmd_node)
+static void	cd_multiple_arg(t_data *data, t_cmdlist *cmd_node)
 {
 	if (!change_dir(data, cmd_node->path[1]))
 	{
@@ -53,6 +66,8 @@ static void	cd_double_arg(t_data *data, t_cmdlist *cmd_node)
 		data->last_output = 1;
 		return ;
 	}
+	else
+		data->last_output = 0;
 }
 
 static void	cd_single_arg(t_data *data)
@@ -68,6 +83,7 @@ static void	cd_single_arg(t_data *data)
 			content = temp_env->content;
 			if (!content)
 				return ;
+			data->last_output = 0;
 			change_dir(data, content);
 			return ;
 		}
@@ -79,16 +95,11 @@ static void	cd_single_arg(t_data *data)
 
 void	com_cd(t_data *data, t_cmdlist *cmd_node)
 {
-	int		array_len;
+	int	array_len;
 
 	array_len = get_array_len(cmd_node->path);
-	if (array_len > 2)
-	{
-		data->last_output = 1;
-		print_error("-bash: cd: too many arguments\n", NULL, NULL);
-	}
-	else if (array_len == 2)
-		cd_double_arg(data, cmd_node);
+	if (array_len > 1)
+		cd_multiple_arg(data, cmd_node);
 	else
 		cd_single_arg(data);
 }

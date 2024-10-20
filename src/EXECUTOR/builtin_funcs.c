@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtin_funcs.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ahyildir <ahyildir@student.42istanbul.c    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/05 19:27:13 by euc               #+#    #+#             */
+/*   Updated: 2024/10/20 15:18:07 by ahyildir         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 int	is_builtin(char *cmd)
@@ -19,16 +31,16 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
-void	run_builtin(t_data *data, t_cmdlist *cmd, int builtin, int *fd, int fd_index)//TODO
-{	
+void	run_builtin(t_data *data, t_cmdlist *cmd, int builtin, int *fd) //TODO
+{
 	if (fd)
-		create_dup(cmd, data, fd, fd_index);
+		create_dup(cmd, data, fd, 2);
 	if (builtin == ECHO)
-		com_echo(cmd);
+		com_echo(cmd, data);
 	else if (builtin == CD)
 		com_cd(data, cmd);
 	else if (builtin == PWD)
-		com_pwd(cmd);
+		com_pwd(cmd, data);
 	else if (builtin == EXPORT)
 		com_export(cmd, data);
 	else if (builtin == UNSET)

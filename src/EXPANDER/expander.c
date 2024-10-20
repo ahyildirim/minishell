@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expander.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ahyildir <ahyildir@student.42istanbul.c    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/05 19:24:48 by ahyildir          #+#    #+#             */
+/*   Updated: 2024/10/20 15:38:38 by ahyildir         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 void	env_expander(char **dst, char *env, t_data *data)
@@ -5,23 +17,24 @@ void	env_expander(char **dst, char *env, t_data *data)
 	t_env	*tmp_env;
 
 	tmp_env = data->env_table;
-	while(tmp_env) //Tüm environment nodeları içinde dolaş
+	while (tmp_env)
 	{
-		if(ft_strcmp(env, tmp_env->env_name)) //env adları eşleşiyor ise
+		if (ft_strcmp(env, tmp_env->env_name))
 		{
-			ft_strjoin(dst, tmp_env->content); //genişleteceğimiz text'e o environmentin adı olarak belirle.
-			break;
+			ft_strjoin(dst, tmp_env->content);
+			break ;
 		}
 		tmp_env = tmp_env->next;
 	}
+	data->last_output = 0;
 }
 
 static void	set_order(char **dst, char **src, t_data *data)
 {
-	if(**src == *DOLLAR) //Eğer dolar ise bu bir custom belirlenmiş environment variabledır. Bu yüzden doların devamında ne olduğuna bakmamız gerekiyor.
+	if (**src == *DOLLAR)
 		dollar_expander(dst, src, data);
-	if(**src == *TILDA)
-		env_expander(dst, "HOME", data); //Eğer ~ ise direkt HOME environmentini atamamız gerekir. (~ Shell'de anadizini ifade eder.)
+	if (**src == *TILDA)
+		env_expander(dst, "HOME", data);
 }
 
 static void	text_expander(t_lexlist *lex_table, int meta, t_data *data)
@@ -30,26 +43,27 @@ static void	text_expander(t_lexlist *lex_table, int meta, t_data *data)
 	char	*expanded_text;
 	int		flag;
 
-	command = lex_table->content; //Conteni command adlı pointera atıyoruz ki orijinal content pointerı değişmesin
+	command = lex_table->content;
 	expanded_text = NULL;
-	flag = 0; //Tırnak içinde olup olmadığımızı kontrol etmemizi sağlayan bir flag
-	while(*command)
+	flag = 0;
+	while (*command)
 	{
-		if(*command == '\'' && (flag == 0 || flag == 1)) //Eğer tek tırnak geldiyse ve flag 0 veya 1 ise
-			flag ^= 1;  //Flag'i 1 ile XOR operatörünü uygula. XOR operatörü eğer değerler aynı ise 0 çıktısını verir farklı ise kıyaslandığı sayı ile asıl sayının toplamını döndürür.
-			//Yani tırnak içinde değilsek (flag 0 ise), tırnak içinde olduğumuzu doğrulayan flag 1 olur, sonraki iterasyonlarda tekrar tırnağa denk gelirsek flag 1 olduğu için 1'in 1 ile XOR kıyaslaması 0 olur ve tırnaktan çıktığımızı belirleriz.
-		else if(*command == '\"' && (flag == 0 || flag == 2)) //Yukarıdakinin aynı mantığı fakat çift tırnak versiyonu.
+		if (*command == '\'' && (flag == 0 || flag == 1))
+			flag ^= 1;
+		else if (*command == '\"' && (flag == 0 || flag == 2))
 			flag ^= 2;
-		else if((*command == *DOLLAR || *command == *TILDA) && (flag == 0 || flag == 2)) //Eğer $ veya ~ var ise bunların ne yapması gerektiğini belirliyoruz.
-			set_order(&expanded_text, &command, data); //Daha iyi anlamak için shell'de environment variables'ı detaylı bir şekilde araştır.
+		else if ((*command == *DOLLAR || *command == *TILDA) && (flag == 0
+				|| flag == 2))
+			set_order(&expanded_text, &command,
+				data);
 		else
-			str_append_char(&expanded_text, *command); //Eğer hiçbirisi değil ise sadece genişleticeğimiz text'e  harfi ekle.
+			str_append_char(&expanded_text, *command);
 		command++;
 	}
-	if(meta && expanded_text == NULL) //Eğer meta karakterden sonra geliyor ise yani 1 olarak yolladıysak direkt return et.
+	if (meta && expanded_text == NULL)
 		return ;
 	free(lex_table->content);
-	lex_table->content = expanded_text; //Content'i genişlettiğimiz, anlam kazandırdığımız text ile eşitle..
+	lex_table->content = expanded_text;
 }
 
 static void	lexlist_value_expander(t_data *data)
@@ -57,21 +71,21 @@ static void	lexlist_value_expander(t_data *data)
 	t_lexlist	*lex_table;
 
 	lex_table = data->lex_table;
-	while(lex_table)
+	while (lex_table)
 	{
-		if(lex_table->type == TEXT) //Eğer gelen content metin ise;
-			text_expander(lex_table, 0, data); //Meta karakter flagi 0 olarak bu metine anlam kazandır.
-		else if(lex_table->type != SIGN_PIPE &&  lex_table->next) //Eğer | değilse ve bir sonraki node var ise
-			if(lex_table->type != SIGN_DOUBLE_LESS) //Eğer << değilse
-				text_expander(lex_table, 1, data); //Yine aynı fonksiyonu çalıştır fakat meta karakter olduğu için 1 flagi ile yolla.
+		if (lex_table->type == TEXT)
+			text_expander(lex_table, 0, data);
+		else if (lex_table->type != SIGN_PIPE && lex_table->next)
+			if (lex_table->type != SIGN_DOUBLE_LESS)
+				text_expander(lex_table, 1, data);
 		lex_table = lex_table->next;
 	}
 }
 
 void	expander(t_data *data)
 {
-	if(data->output == 2)
+	if (data->output == 2)
 		return ;
-	lexlist_value_expander(data); //Lexer ile doldurduğumuz lexlist'in içindeki contentlere parser bölümü için anlam kazandırır.
-	clear_empty_lextables(data); //Eğer hiçbişeye anlam kazandıramadıysak, yani node içinde content'i boş olan var ise bu node'ları silmemizi sağlayan fonksiyon.
+	lexlist_value_expander(data);
+	clear_empty_lextables(data);
 }

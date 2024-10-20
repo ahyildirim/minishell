@@ -1,33 +1,45 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ahyildir <ahyildir@student.42istanbul.c    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/05 19:25:55 by ahyildir          #+#    #+#             */
+/*   Updated: 2024/10/05 19:25:56 by ahyildir         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
-static void free_filelist(t_filelist *files)
+static void	free_filelist(t_filelist *files)
 {
 	t_filelist	*tmp;
 
-	while(files)
+	while (files)
 	{
 		tmp = files;
 		files = files->next;
-		if(tmp->fd > SSTDERR)
+		if (tmp->fd > SSTDERR)
 			close(tmp->fd);
 		free(tmp);
 	}
 }
 
-static void free_parser(t_data *data)
+static void	free_parser(t_data *data)
 {
 	t_cmdlist	*parser;
 	t_cmdlist	*tmp;
 
 	parser = data->cmd_table;
-	while(parser)
+	while (parser)
 	{
 		tmp = parser;
 		parser = parser->next;
 		free_filelist(tmp->files);
-		if(tmp->path)
+		if (tmp->path)
 			free(tmp->path);
-		if(tmp->heradoc_values)
+		if (tmp->heradoc_values)
 		{
 			free(tmp->heradoc_values);
 			tmp->heradoc_values = NULL;
@@ -43,26 +55,28 @@ static void	free_lexer(t_data *data)
 	t_lexlist	*tmp;
 
 	lexer = data->lex_table;
-	while(lexer)
+	while (lexer)
 	{
 		tmp = lexer;
 		lexer = lexer->next;
-		if(tmp->content)
+		if (tmp->content)
 			free(tmp->content);
 		free(tmp);
 	}
 	data->lex_table = NULL;
 }
 
-void free_data(t_data *data)
+void	free_data(t_data *data)
 {
+	char	**meta_chars;
+
 	if (!data)
-		return;
+		return ;
 	if (data->input)
 		free(data->input);
 	if (data->metachars)
 	{
-		char **meta_chars = data->metachars;
+		meta_chars = data->metachars;
 		while (*meta_chars)
 		{
 			free(*meta_chars);
@@ -83,16 +97,16 @@ void free_data(t_data *data)
 
 void	free_loop(t_data *data)
 {
-	if(data->input)
+	if (data->input)
 	{
 		free(data->input);
 		data->input = NULL;
 	}
-	if(data->lex_table)
+	if (data->lex_table)
 		free_lexer(data);
-	if(data->cmd_table)
+	if (data->cmd_table)
 		free_parser(data);
-	if(data->heradoc_fd > SSTDERR)
+	if (data->heradoc_fd > SSTDERR)
 	{
 		close(data->heradoc_fd);
 		data->heradoc_fd = 0;
