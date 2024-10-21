@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahyildir <ahyildir@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: euc <euc@student.42istanbul.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 19:27:20 by euc               #+#    #+#             */
-/*   Updated: 2024/10/20 16:19:06 by ahyildir         ###   ########.fr       */
+/*   Updated: 2024/10/21 13:46:33 by euc              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,4 +83,5 @@ void	main_executor(t_data *data)
 		run_single(data, data->cmd_table, NULL);
 	else
 		run_multiple(data, data->cmd_table);
+	g_sig = 1;
 }

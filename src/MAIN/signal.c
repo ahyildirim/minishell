@@ -6,7 +6,7 @@
 /*   By: euc <euc@student.42istanbul.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 19:27:51 by euc               #+#    #+#             */
-/*   Updated: 2024/10/21 12:01:51 by euc              ###   ########.fr       */
+/*   Updated: 2024/10/21 13:58:01 by euc              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,21 @@ void	handle_sigint(int sig)
 	(void)sig;
 	exit(SIGNAL_C);
 }
-void	ctrl_d(int sig)
+
+static void	suppress_output(void)
+{
+	struct termios	termios_p;
+
+	if (tcgetattr(0, &termios_p) != 0)
+		perror("Minishell: tcgetattr");
+	termios_p.c_lflag &= ~ECHOCTL;
+	if (tcsetattr(0, 0, &termios_p) != 0)
+		perror("Minishell: tcsetattr");
+}
+static void	ctrl_d(int sig)
 {
 	(void)sig;
-	rl_on_new_line();
-	write(1, "\033[K", 3);
 	rl_redisplay();
-	g_sig = 0;
 }
 
 void	ctrl_c(int sig)
@@ -54,6 +62,7 @@ void	ctrl_c(int sig)
 
 void	handle_signal(void)
 {
+	suppress_output();
 	signal(SIGINT, ctrl_c);
 	signal(SIGQUIT, ctrl_d);
 }
