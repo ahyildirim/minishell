@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahyildir <ahyildir@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: euc <euc@student.42istanbul.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 19:27:51 by euc               #+#    #+#             */
-/*   Updated: 2024/10/20 16:19:36 by ahyildir         ###   ########.fr       */
+/*   Updated: 2024/10/21 12:01:51 by euc              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,14 @@ void	handle_sigint(int sig)
 {
 	(void)sig;
 	exit(SIGNAL_C);
+}
+void	ctrl_d(int sig)
+{
+	(void)sig;
+	rl_on_new_line();
+	write(1, "\033[K", 3);
+	rl_redisplay();
+	g_sig = 0;
 }
 
 void	ctrl_c(int sig)
@@ -47,5 +55,5 @@ void	ctrl_c(int sig)
 void	handle_signal(void)
 {
 	signal(SIGINT, ctrl_c);
-	signal(SIGQUIT, SIG_IGN);
+	signal(SIGQUIT, ctrl_d);
 }
