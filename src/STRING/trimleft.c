@@ -28,9 +28,9 @@ int	trim_left_spaces(char **command)
 	size_t	len;
 
 	len = 0;
-	if (!*command)
-		return (len);
-	while (**command == 32)
+	if (!*command || is_all_space(*command))
+		return (-1);
+	while (**command == 32 || **command == '\t') 
 	{
 		len++;
 		(*command)++;
