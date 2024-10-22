@@ -24,6 +24,8 @@ SRC        :=      src/EXPANDER/clearemptylextables.c \
                           src/MAIN/init.c \
                           src/MAIN/main.c \
                           src/MAIN/signal.c \
+                          src/MAIN/printlexer.c \
+                          src/MAIN/printparser.c \
                           src/PARSER/createfilelist.c \
                           src/PARSER/fillcmdtable.c \
                           src/PARSER/createfiles.c \

@@ -41,7 +41,7 @@ int			ft_isdigit(int c);
 int			ft_strncmp(const char *s1, const char *s2, size_t n);
 int			type_control(t_data *data, t_cmdlist *cmd, char **envs);
 
-size_t		trim_left_spaces(char **command);
+int			trim_left_spaces(char **command);
 size_t		ft_strlen(const char *s);
 
 char		*ft_strlcpy(char *dst, char *src, int len);
@@ -102,5 +102,8 @@ void		handle_sigint(int sig);
 t_env		*add_new_envnode(t_env **env_table, char *env);
 
 t_lexlist	*add_lex_node(t_lexlist **node);
+
+void	print_lexer(t_data *data);
+void	print_parser(t_data *data);
 
 #endif

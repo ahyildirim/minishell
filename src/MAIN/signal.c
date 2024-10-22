@@ -23,7 +23,7 @@ void	handle_sigint(int sig)
 	exit(SIGNAL_C);
 }
 
-static void	suppress_output(void)
+/* static void	suppress_output(void)
 {
 	struct termios	termios_p;
 
@@ -32,7 +32,7 @@ static void	suppress_output(void)
 	termios_p.c_lflag &= ~ECHOCTL;
 	if (tcsetattr(0, 0, &termios_p) != 0)
 		perror("Minishell: tcsetattr");
-}
+} */
 static void	ctrl_d(int sig)
 {
 	(void)sig;
@@ -62,7 +62,7 @@ void	ctrl_c(int sig)
 
 void	handle_signal(void)
 {
-	suppress_output();
+	/* suppress_output(); */
 	signal(SIGINT, ctrl_c);
 	signal(SIGQUIT, ctrl_d);
 }

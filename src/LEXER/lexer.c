@@ -89,7 +89,8 @@ void	create_lexlist(char *command, t_lexlist **lex_table, t_data *data)
 
 	if (!command || !*command)
 		return ;
-	trim_left_spaces(&command);
+	if(trim_left_spaces(&command) == -1)
+		return ;
 	last_node = add_lex_node(lex_table);
 	parse_command(&command, last_node, data);
 	create_lexlist(command, lex_table, data);

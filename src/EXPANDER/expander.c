@@ -87,5 +87,5 @@ void	expander(t_data *data)
 	if (data->output == 2)
 		return ;
 	lexlist_value_expander(data);
-	clear_empty_lextables(data);
+	//clear_empty_lextables(data);
 }
