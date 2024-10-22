@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   trimleft.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahyildir <ahyildir@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: euc <euc@student.42istanbul.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 19:25:51 by ahyildir          #+#    #+#             */
-/*   Updated: 2024/10/05 19:25:52 by ahyildir         ###   ########.fr       */
+/*   Updated: 2024/10/22 18:19:23 by euc              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ size_t	trim_left_spaces(char **command)
 	len = 0;
 	if (!*command)
 		return (len);
-	while (**command == 32)
+	while (**command == 32 || **command == '\t')
 	{
 		len++;
 		(*command)++;
