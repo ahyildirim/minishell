@@ -45,12 +45,6 @@ static void	fill_cmdnode(t_cmdlist *cmd_table, t_lexlist **lex_table,
 	int		start;
 
 	cmd_table->path = create_path(*lex_table);
-	if (!cmd_table->path)
-	{
-		cmd_table->path = (char **)malloc(sizeof(char *) * 2);
-		cmd_table->path[0] = ft_strdup("");
-		cmd_table->path[1] = NULL;
-	}
 	tmp_path = cmd_table->path;
 	start = 0;
 	while (*lex_table && (*lex_table)->type != SIGN_PIPE)
@@ -62,9 +56,7 @@ static void	fill_cmdnode(t_cmdlist *cmd_table, t_lexlist **lex_table,
 			cmd_expander(&((*lex_table)->content), data);
 			start++;
 		}
-		if (!(*lex_table)->content || *(*lex_table)->content == '\0')
-			*(tmp_path++) = ft_strdup("");
-		else
+		if ((*lex_table)->content)
 			*(tmp_path++) = (*lex_table)->content;
 		*lex_table = (*lex_table)->next;
 	}
@@ -84,7 +76,7 @@ void	fill_cmdtable(t_data *data)
 	while (tmp_cmdtable)
 	{
 		fill_cmdnode(tmp_cmdtable, &tmp_lextable, data);
-		if (tmp_lextable && tmp_lextable->content && *tmp_lextable->content == *PIPE)
+		if (tmp_lextable && *tmp_lextable->content == *PIPE)
 			tmp_lextable = tmp_lextable->next;
 		tmp_cmdtable = tmp_cmdtable->next;
 	}

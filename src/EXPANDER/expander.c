@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahyildir <ahyildir@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: euc <euc@student.42istanbul.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 19:24:48 by ahyildir          #+#    #+#             */
-/*   Updated: 2024/10/20 15:38:38 by ahyildir         ###   ########.fr       */
+/*   Updated: 2024/10/24 17:17:50 by euc              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,5 +87,5 @@ void	expander(t_data *data)
 	if (data->output == 2)
 		return ;
 	lexlist_value_expander(data);
-	//clear_empty_lextables(data);
+	clear_empty_lextables(data);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tables.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahyildir <ahyildir@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: euc <euc@student.42istanbul.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 19:24:35 by ahyildir          #+#    #+#             */
-/*   Updated: 2024/10/05 19:24:36 by ahyildir         ###   ########.fr       */
+/*   Updated: 2024/10/24 17:20:43 by euc              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ typedef struct s_data
 	int					output;
 	int					main_pid;
 	int					heradoc_fd;
-	int					cnt_pipe;
 	t_lexlist			*lex_table;
 	t_env				*env_table;
 	t_cmdlist			*cmd_table;

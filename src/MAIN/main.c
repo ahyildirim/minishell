@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahyildir <ahyildir@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: euc <euc@student.42istanbul.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 19:27:48 by euc               #+#    #+#             */
-/*   Updated: 2024/10/20 13:33:45 by ahyildir         ###   ########.fr       */
+/*   Updated: 2024/10/24 18:19:29 by euc              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@ void	minishell_func(t_data *data)
 	lexer(data);
 	expander(data);
 	parser(data);
-	//print_lexer(data);
-	//print_parser(data);
 	main_executor(data);
 	free_loop(data);
 }

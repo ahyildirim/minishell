@@ -6,7 +6,7 @@
 /*   By: euc <euc@student.42istanbul.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 19:27:45 by euc               #+#    #+#             */
-/*   Updated: 2024/10/05 19:27:46 by euc              ###   ########.fr       */
+/*   Updated: 2024/10/24 17:20:27 by euc              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ void	init_data(t_data *data)
 	data->output = 0;
 	data->main_pid = 0;
 	data->heradoc_fd = -1;
-	data->cnt_pipe = 0;
 	data->env_table = NULL;
 	data->cmd_table = NULL;
 	data->lex_table = NULL;

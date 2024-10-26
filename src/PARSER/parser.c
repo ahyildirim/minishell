@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahyildir <ahyildir@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: euc <euc@student.42istanbul.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 19:25:46 by ahyildir          #+#    #+#             */
-/*   Updated: 2024/10/19 19:00:20 by ahyildir         ###   ########.fr       */
+/*   Updated: 2024/10/24 17:20:25 by euc              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ static void	create_cmdlist(t_lexlist *lex_table, t_data *data)
 			pipe_count++;
 		lex_table = lex_table->next;
 	}
-	data->cnt_pipe = pipe_count;
 	create_cmd_nodes(pipe_count, data);
 }
 

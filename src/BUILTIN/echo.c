@@ -3,33 +3,48 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahyildir <ahyildir@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: euc <euc@student.42istanbul.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 19:26:50 by euc               #+#    #+#             */
-/*   Updated: 2024/10/19 13:53:05 by ahyildir         ###   ########.fr       */
+/*   Updated: 2024/10/24 15:13:59 by euc              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+static void	echo_util(char **path, int *i, int *j, int *is_n)
+{
+	while (path[*i] && path[*i][0] == '-' && path[*i][1] == 'n')
+	{
+		*j = 1;
+		while (path[*i][*j] == 'n')
+			(*j)++;
+		if (path[*i][*j] != '\0')
+			break ;
+		*is_n = 1;
+		(*i)++;
+	}
+}
+
 void	com_echo(t_cmdlist *cmd, t_data *data)
 {
 	char	**path;
 	int		is_n;
+	int		i;
+	int		j;
 
 	is_n = 0;
-	path = &cmd->path[1];
-	if (*path && ft_strcmp(*path, "-n"))
-	{
-		is_n = 1;
-		path++;
-	}
-	while (*path)
+	j = 0;
+	path = cmd->path;
+	i = 1;
+	echo_util(path, &i, &j, &is_n);
+	while (path[i])
 	{
 		if (*path)
-			ft_putstr_fd(*path, cmd->output_file);
-		if (*(++path))
+			ft_putstr_fd(path[i], cmd->output_file);
+		if (path[i + 1])
 			ft_putstr_fd(" ", cmd->output_file);
+		i++;
 	}
 	if (!is_n)
 		ft_putstr_fd("\n", cmd->output_file);

@@ -6,7 +6,7 @@
 /*   By: ahyildir <ahyildir@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 19:25:55 by ahyildir          #+#    #+#             */
-/*   Updated: 2024/10/05 19:25:56 by ahyildir         ###   ########.fr       */
+/*   Updated: 2024/10/22 16:42:25 by ahyildir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,35 +64,6 @@ static void	free_lexer(t_data *data)
 		free(tmp);
 	}
 	data->lex_table = NULL;
-}
-
-void	free_data(t_data *data)
-{
-	char	**meta_chars;
-
-	if (!data)
-		return ;
-	if (data->input)
-		free(data->input);
-	if (data->metachars)
-	{
-		meta_chars = data->metachars;
-		while (*meta_chars)
-		{
-			free(*meta_chars);
-			meta_chars++;
-		}
-		free(data->metachars);
-	}
-	if (data->input)
-		free(data->input);
-	if (data->env_table)
-		free_envtable(data);
-	if (data->cmd_table)
-		free_parser(data);
-	if (data->lex_table)
-		free_lexer(data);
-	free(data);
 }
 
 void	free_loop(t_data *data)

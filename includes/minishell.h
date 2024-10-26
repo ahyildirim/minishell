@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahyildir <ahyildir@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: euc <euc@student.42istanbul.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 19:24:32 by ahyildir          #+#    #+#             */
-/*   Updated: 2024/10/20 15:17:44 by ahyildir         ###   ########.fr       */
+/*   Updated: 2024/10/24 16:44:19 by euc              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int			ft_isdigit(int c);
 int			ft_strncmp(const char *s1, const char *s2, size_t n);
 int			type_control(t_data *data, t_cmdlist *cmd, char **envs);
 
-int			trim_left_spaces(char **command);
+size_t		trim_left_spaces(char **command);
 size_t		ft_strlen(const char *s);
 
 char		*ft_strlcpy(char *dst, char *src, int len);
@@ -88,7 +88,6 @@ void		com_echo(t_cmdlist *cmd, t_data *data);
 void		free_utils(t_data *data);
 void		free_loop(t_data *data);
 void		free_core(t_data *data);
-void		free_data(t_data *data);
 void		com_pwd(t_cmdlist *cmd, t_data *data);
 void		init_data(t_data *data);
 void		expander(t_data *data);
@@ -98,12 +97,10 @@ void		lexer(t_data *data);
 void		handle_signal(void);
 void		clear_pipe(int *fd);
 void		handle_sigint(int sig);
+void		check_quotes(t_lexlist *lex_table, t_data *data);
 
 t_env		*add_new_envnode(t_env **env_table, char *env);
 
 t_lexlist	*add_lex_node(t_lexlist **node);
-
-void	print_lexer(t_data *data);
-void	print_parser(t_data *data);
 
 #endif

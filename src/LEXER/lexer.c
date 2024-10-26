@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahyildir <ahyildir@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: euc <euc@student.42istanbul.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 19:24:59 by ahyildir          #+#    #+#             */
-/*   Updated: 2024/10/05 19:25:00 by ahyildir         ###   ########.fr       */
+/*   Updated: 2024/10/24 18:28:04 by euc              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static size_t	get_quote_len(const char *command, t_lexlist *lex, t_data *data)
+static int	get_quote_len(const char *command, t_data *data)
 {
-	size_t	len;
+	int		len;
 	char	c;
 
 	len = 0;
@@ -37,14 +37,14 @@ static size_t	get_quote_len(const char *command, t_lexlist *lex, t_data *data)
 		command++;
 	}
 	if (*command == '\0')
-		quote_error(lex, data);
+		data->output = -1;
 	return (len);
 }
 
-static size_t	get_command_len(char *command, t_data *data)
+static int	get_command_len(char *command, t_data *data)
 {
 	size_t	len;
-	size_t	quote_len;
+	int		quote_len;
 	char	*meta;
 
 	len = 0;
@@ -59,7 +59,7 @@ static size_t	get_command_len(char *command, t_data *data)
 		}
 		if (*command == *SINGLE_QUOTE || *command == *DOUBLE_QUOTE)
 		{
-			quote_len = get_quote_len(command, data->lex_table, data);
+			quote_len = get_quote_len(command, data);
 			len += quote_len;
 			command += quote_len;
 			continue ;
@@ -72,7 +72,7 @@ static size_t	get_command_len(char *command, t_data *data)
 
 static void	parse_command(char **command, t_lexlist *last_node, t_data *data)
 {
-	size_t	len;
+	int		len;
 	char	*temp;
 
 	len = get_command_len(*command, data);
@@ -89,8 +89,7 @@ void	create_lexlist(char *command, t_lexlist **lex_table, t_data *data)
 
 	if (!command || !*command)
 		return ;
-	if(trim_left_spaces(&command) == -1)
-		return ;
+	trim_left_spaces(&command);
 	last_node = add_lex_node(lex_table);
 	parse_command(&command, last_node, data);
 	create_lexlist(command, lex_table, data);
@@ -101,5 +100,8 @@ void	lexer(t_data *data)
 	data->lex_table = NULL;
 	create_lexlist(data->input, &(data->lex_table), data);
 	set_lex_types(data->lex_table, data);
+	check_quotes(data->lex_table, data);
+	if (data->output == -1)
+		quote_error(data->lex_table, data);
 	check_syntax(data);
 }

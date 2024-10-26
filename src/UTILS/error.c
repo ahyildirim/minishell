@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahyildir <ahyildir@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: euc <euc@student.42istanbul.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 19:25:53 by ahyildir          #+#    #+#             */
-/*   Updated: 2024/10/17 20:14:07 by ahyildir         ###   ########.fr       */
+/*   Updated: 2024/10/24 18:07:37 by euc              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int	print_lex_error(t_lexlist *lex_table, t_data *data)
 	print_error("-bash: syntax error near unexpected token '",
 		lex_table->content, "'\n");
 	data->output = 2;
+	data->last_output = 258;
 	lexer_free_no_heradoc(lex_table, data);
 	return (0);
 }
@@ -35,5 +36,7 @@ int	quote_error(t_lexlist *lex_table, t_data *data)
 {
 	ft_putstr_fd("Syntax error with quotes.\n", 2);
 	lexer_free_no_heradoc(lex_table, data);
-	return (0);
+	data->last_output = 127;
+	data->output = 0;
+	return (-1);
 }

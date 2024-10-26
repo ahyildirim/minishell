@@ -6,7 +6,7 @@
 /*   By: euc <euc@student.42istanbul.com.tr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 19:27:51 by euc               #+#    #+#             */
-/*   Updated: 2024/10/22 00:55:35 by euc              ###   ########.fr       */
+/*   Updated: 2024/10/24 18:19:59 by euc              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,14 @@ static void	suppress_output(void)
 	if (tcsetattr(0, 0, &termios_p) != 0)
 		perror("Minishell: tcsetattr");
 }
+
 static void	ctrl_d(int sig)
 {
 	(void)sig;
 	rl_redisplay();
 }
 
-void	ctrl_c(int sig)
+static void	ctrl_c(int sig)
 {
 	(void)sig;
 	if (g_sig == 2)
